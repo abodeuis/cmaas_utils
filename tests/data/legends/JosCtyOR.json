@@ -1,0 +1,26 @@
+{
+  "version": "5.0.2",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "nickel_laterite_poly",
+      "points": [
+        [
+          934.2857142857142,
+          7538.5714285714275
+        ],
+        [
+          770.1298701298701,
+          7470.12987012987
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "JosCtyOR.tif",
+  "imageData": null,
+  "imageHeight": 11113,
+  "imageWidth": 7200
+}

@@ -1,0 +1,378 @@
+{
+    "version": "5.0.1",
+    "flags": {},
+    "shapes": [
+        {
+            "label": "Qal_poly",
+            "points": [
+                [
+                    6454.255319148936,
+                    3609.574468085106
+                ],
+                [
+                    6622.340425531915,
+                    3689.3617021276596
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "Qbx_poly",
+            "points": [
+                [
+                    6456.3829787234035,
+                    5179.787234042553
+                ],
+                [
+                    6624.468085106382,
+                    5251.063829787234
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "normal_fault_line",
+            "points": [
+                [
+                    11542.268041237114,
+                    2248.453608247423
+                ],
+                [
+                    11723.711340206186,
+                    2311.3402061855672
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "normal_ll_ss_fault_line",
+            "points": [
+                [
+                    11538.144329896908,
+                    2524.7422680412374
+                ],
+                [
+                    11726.804123711341,
+                    2607.216494845361
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "normal_rl_ss_fault_line",
+            "points": [
+                [
+                    11527.835051546392,
+                    2361.855670103093
+                ],
+                [
+                    11726.804123711341,
+                    2438.1443298969075
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "inclined_pt",
+            "points": [
+                [
+                    11602.061855670103,
+                    3090.721649484536
+                ],
+                [
+                    11684.536082474227,
+                    3154.639175257732
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "Qls_poly",
+            "points": [
+                [
+                    6456.701030927835,
+                    4413.402061855671
+                ],
+                [
+                    6621.649484536083,
+                    4492.783505154639
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "Qtm_poly",
+            "points": [
+                [
+                    6458.762886597939,
+                    4639.1752577319585
+                ],
+                [
+                    6619.587628865979,
+                    4712.371134020619
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "Qto1_poly",
+            "points": [
+                [
+                    6454.639175257732,
+                    4862.886597938144
+                ],
+                [
+                    6622.6804123711345,
+                    4937.113402061856
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "Qto2_poly",
+            "points": [
+                [
+                    6460.8247422680415,
+                    5535.051546391753
+                ],
+                [
+                    6621.649484536083,
+                    5606.18556701031
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "Qty_poly",
+            "points": [
+                [
+                    6457.731958762887,
+                    4015.4639175257735
+                ],
+                [
+                    6624.742268041237,
+                    4089.6907216494847
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "Su_poly",
+            "points": [
+                [
+                    8096.907216494846,
+                    1070.1030927835052
+                ],
+                [
+                    8265.9793814433,
+                    1146.3917525773197
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "Mb_poly",
+            "points": [
+                [
+                    6462.886597938144,
+                    7190.721649484536
+                ],
+                [
+                    6626.80412371134,
+                    7261.855670103093
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "Mbs_poly",
+            "points": [
+                [
+                    8096.907216494846,
+                    451.54639175257734
+                ],
+                [
+                    8256.701030927836,
+                    519.5876288659794
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "Mbv_poly",
+            "points": [
+                [
+                    6463.157894736842,
+                    6519.999999999999
+                ],
+                [
+                    6632.631578947368,
+                    6593.684210526315
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "Mf_poly",
+            "points": [
+                [
+                    6462.105263157894,
+                    6249.473684210526
+                ],
+                [
+                    6624.210526315789,
+                    6317.894736842105
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "Mfw_poly",
+            "points": [
+                [
+                    6464.210526315789,
+                    5934.736842105262
+                ],
+                [
+                    6628.421052631578,
+                    6008.421052631578
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "Oc_poly",
+            "points": [
+                [
+                    8103.157894736842,
+                    2055.7894736842104
+                ],
+                [
+                    8268.421052631578,
+                    2131.578947368421
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "Oel_poly",
+            "points": [
+                [
+                    8111.578947368421,
+                    4375.78947368421
+                ],
+                [
+                    8271.57894736842,
+                    4447.368421052632
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "Oeu_poly",
+            "points": [
+                [
+                    8107.368421052631,
+                    3705.2631578947367
+                ],
+                [
+                    8269.473684210525,
+                    3779.9999999999995
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "Of_poly",
+            "points": [
+                [
+                    8105.263157894737,
+                    2363.157894736842
+                ],
+                [
+                    8269.473684210525,
+                    2441.052631578947
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "Opl_poly",
+            "points": [
+                [
+                    8103.157894736842,
+                    2681.052631578947
+                ],
+                [
+                    8266.315789473683,
+                    2755.7894736842104
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "Osp_poly",
+            "points": [
+                [
+                    8106.315789473683,
+                    2992.6315789473683
+                ],
+                [
+                    8267.368421052632,
+                    3061.052631578947
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        }
+    ],
+    "imagePath": "AR_Maumee\\AR_Maumee.tif",
+    "imageData": null,
+    "imageHeight": 9740,
+    "imageWidth": 15825
+}

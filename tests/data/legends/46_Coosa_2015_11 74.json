@@ -1,0 +1,106 @@
+{
+    "version": "5.0.1",
+    "flags": {},
+    "shapes": [
+        {
+            "label": "drill_pt",
+            "points": [
+                [
+                    773.4966887417219,
+                    86.26490066225165
+                ],
+                [
+                    799.9867549668874,
+                    108.11920529801324
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "trench_pt",
+            "points": [
+                [
+                    773.4966887417219,
+                    115.40397350993379
+                ],
+                [
+                    801.3112582781457,
+                    133.28476821192055
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "model_line",
+            "points": [
+                [
+                    764.225165562914,
+                    190.9006622516556
+                ],
+                [
+                    813.2317880794702,
+                    166.39735099337747
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "QGS_poly",
+            "points": [
+                [
+                    765.5496688741722,
+                    220.03973509933775
+                ],
+                [
+                    811.9072847682119,
+                    194.21192052980132
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "QBGS_poly",
+            "points": [
+                [
+                    765.5496688741722,
+                    245.20529801324506
+                ],
+                [
+                    814.5562913907285,
+                    218.71523178807945
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "QMBGS_poly",
+            "points": [
+                [
+                    763.5629139072847,
+                    271.0331125827814
+                ],
+                [
+                    813.2317880794702,
+                    249.841059602649
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        }
+    ],
+    "imagePath": "46_Coosa_2015_11 74.tiff",
+    "imageData": null,
+    "imageHeight": 812,
+    "imageWidth": 1051
+}

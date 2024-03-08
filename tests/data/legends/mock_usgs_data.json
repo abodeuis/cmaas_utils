@@ -1,0 +1,74 @@
+{
+    "version": "5.0.1",
+    "flags": {},
+    "shapes": [
+        {
+            "label": "test_point_unit_pt",
+            "points": [
+                [
+                    1.0,
+                    2.0
+                ],
+                [
+                    21.0,
+                    23.0
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "test_line_unit_line",
+            "points": [
+                [
+                    3.0,
+                    4.0
+                ],
+                [
+                    31.0,
+                    43.0
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "test_polygon_unit_poly",
+            "points": [
+                [
+                    5.0,
+                    6.0
+                ],
+                [
+                    51.0,
+                    63.0
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        },
+        {
+            "label": "test_unknown_unit",
+            "points": [
+                [
+                    7.0,
+                    8.0
+                ],
+                [
+                    71.0,
+                    83.0
+                ]
+            ],
+            "group_id": null,
+            "shape_type": "rectangle",
+            "flags": {}
+        }
+    ],
+    "imagePath": "test_image.tif",
+    "imageData": null,
+    "imageHeight": 100,
+    "imageWidth": 100
+}

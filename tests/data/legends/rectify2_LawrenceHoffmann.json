@@ -1,0 +1,106 @@
+{
+  "version": "5.0.2",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "structure_contour_line",
+      "points": [
+        [
+          4508.609271523179,
+          3533.774834437086
+        ],
+        [
+          4646.35761589404,
+          3588.0794701986756
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "well_pt",
+      "points": [
+        [
+          4521.854304635762,
+          2887.417218543046
+        ],
+        [
+          4637.748344370861,
+          2937.748344370861
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "crystalline_rocks_poly",
+      "points": [
+        [
+          4535.664335664336,
+          3411.1888111888115
+        ],
+        [
+          4638.461538461539,
+          3460.839160839161
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "Triassic_rocks_poly",
+      "points": [
+        [
+          4537.762237762238,
+          3464.3356643356647
+        ],
+        [
+          4638.461538461539,
+          3513.2867132867136
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "thrust_fault_line",
+      "points": [
+        [
+          4517.482517482517,
+          3273.4265734265737
+        ],
+        [
+          4642.657342657343,
+          3307.6923076923076
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "fault_line",
+      "points": [
+        [
+          4510.48951048951,
+          3138.4615384615386
+        ],
+        [
+          4645.454545454546,
+          3183.2167832167834
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "rectify2_LawrenceHoffmann_well_pt\\rectify2_LawrenceHoffmann.tif",
+  "imageData": null,
+  "imageHeight": 3791,
+  "imageWidth": 5476
+}
