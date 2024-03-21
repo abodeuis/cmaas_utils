@@ -3,7 +3,7 @@
     "flags": {},
     "shapes": [
         {
-            "label": "test_point_unit_pt",
+            "label": "mock_point_unit_pt",
             "points": [
                 [
                     1.0,
@@ -19,7 +19,7 @@
             "flags": {}
         },
         {
-            "label": "test_line_unit_line",
+            "label": "mock_line_unit_line",
             "points": [
                 [
                     3.0,
@@ -35,7 +35,7 @@
             "flags": {}
         },
         {
-            "label": "test_polygon_unit_poly",
+            "label": "mock_polygon_unit_poly",
             "points": [
                 [
                     5.0,
@@ -51,7 +51,7 @@
             "flags": {}
         },
         {
-            "label": "test_unknown_unit",
+            "label": "mock_unknown_unit",
             "points": [
                 [
                     7.0,
@@ -67,7 +67,7 @@
             "flags": {}
         }
     ],
-    "imagePath": "test_image.tif",
+    "imagePath": "mock_map_data.tif",
     "imageData": null,
     "imageHeight": 100,
     "imageWidth": 100

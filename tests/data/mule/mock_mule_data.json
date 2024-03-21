@@ -1,0 +1,139 @@
+{
+    "version" : "0.1",
+    "map_name" : "mock_map_data", 
+    "metadata" : {
+        "provenance" : "MockData",
+        "title" : "Mock Map Title",
+        "authors" : ["Mock Author", "test author"],
+        "year" : 2025,
+        "publisher" : "Mock Publisher",
+        "organization" : "Mock Organization",
+        "source_url" : "http://www.mocksource.com",
+        "url" : "http://www.mockdata.com",
+        "scale" : "1:24000",
+        "map_shape" : "rectangle",
+        "map_color" : "full color",
+        "physiographic_region" : "Mock Physiographic Region"
+    },
+    "layout" : {
+        "provenance" : "MockData",
+        "map" :  [
+            [0.0, 1.0],
+            [3.0,2.0],
+            [4.0,5.0],
+            [8.0,7.0]
+        ],
+        "point_legend" : [
+            [17.0,19.0],
+            [21.0,20.0],
+            [22.0,24.0],
+            [23.0,32.0]
+        ],
+        "line_legend" : [
+            [17.0,19.0],
+            [21.0,20.0],
+            [22.0,24.0],
+            [23.0,32.0]
+        ],
+        "polygon_legend" : [
+            [10.0,12.0],
+            [11.0,13.0],
+            [14.0,15.0],
+            [18.0,16.0]
+        ],
+        "cross_section" : [
+            [50.0,49.0],
+            [48.0,51.0],
+            [47.0,52.0],
+            [55.0,56.0]
+        ],
+        "correlation_diagram" : [
+            [33.0,34.0],
+            [36.0,35.0],
+            [40.0,42.0],
+            [41.0,39.0]
+        ]
+    },
+    "legend" : {
+        "provenance" : "MockData",
+        "features" : [
+            {
+                "type" : "point",
+                "label" : "mock point unit",
+                "abbreviation" : "mpu",
+                "description" : "This is the description for the mock point unit",
+                "color" : "#000000",
+                "pattern" : null,
+                "overlay" : null,
+                "bbox" : [[1.0,2.0],[21.0,23.0]]
+            },
+            {
+                "type" : "line",
+                "label" : "mock line unit",
+                "abbreviation" : "mlu",
+                "description" : "This is the description for the mock line unit",
+                "color" : "#000000",
+                "pattern" : null,
+                "overlay" : null,
+                "bbox" : [[3.0,4.0],[31.0,43.0]]
+            },
+            {
+                "type" : "polygon",
+                "label" : "mock polygon unit",
+                "abbreviation" : "mpyu",
+                "description" : "This is the description for the mock polygon unit",
+                "color" : "#A133CC4",
+                "pattern" : true,
+                "overlay" : true,
+                "bbox" : [[5.0,6.0],[51.0,63.0]]
+            },
+            {
+                "type" : "unknown",
+                "label" : "mock unknown unit",
+                "abbreviation" : "muu",
+                "description" : "This is the description for the mock unknown unit",
+                "color" : "#45882F",
+                "pattern" : false,
+                "overlay" : false,
+                "bbox" : [[7.0,8.0],[71.0,83.0]]
+            }
+        ]
+    },
+    "georeference" : [{
+        "provenance" : "MockData",
+        "crs" : "EPSG:4326",
+        "transform" : [1.0,0.0,0.0,0.0,1.0,0.0],
+        "gcps" : [
+            {
+                "pixel_x" : 1.0,
+                "pixel_y" : 2.0,
+                "ground_lat" : 3.0,
+                "ground_long" : 4.0,
+                "confidence" : 0.9993
+            },
+            {
+                "pixel_x" : 5.0,
+                "pixel_y" : 6.0,
+                "ground_lat" : 7.0,
+                "ground_long" : 8.0,
+                "confidence" : 0.4863
+            }
+        ],
+        "confidence" : 0.8
+    }],
+    "ocrtext" : {
+        "provenance" : "MockData",
+        "features" : [
+            {
+                "label" : "Mock text 1",
+                "geometry" : [[1.0,2.0],[3.0,4.0],[5.0,6.0],[7.0,8.0]],
+                "confidence" : 0.9
+            },
+            {
+                "label" : "Mock text 2",
+                "geometry" : [[9.0,10.0],[11.0,12.0],[13.0,14.0],[15.0,16.0]],
+                "confidence" : 0.7
+            }
+        ]
+    }
+}
