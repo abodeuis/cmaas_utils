@@ -1,3 +1,8 @@
 numpy
 rasterio
 geopandas
+
+# Dev
+pytest
+pytest-cov
+pip-tools

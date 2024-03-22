@@ -1,0 +1,30 @@
+# pyproject.toml
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "cmaas_utils"
+version = "0.1.0"
+authors = [{ name="Albert Bode", email="abode@illinois.edu" }]
+description = "This package contains common utility functions including structured data classes, io functions and other utilities that are used across the TA1 teams for DARPA Critical Mineral Assesments with AI Support (CMAAS)"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "numpy",
+  "rasterio",
+  "geopandas"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+keywords = ["CMAAS"]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-cov", "pip-tools"]
+
+[project.urls]
+Homepage = "https://github.com/abodeuis/cmaas_utils/tree/main"
