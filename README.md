@@ -3,15 +3,14 @@
 This package contains common utility functions including structured data classes, io functions and other utilities that are used across the TA1 teams for DARPA Critical Mineral Assesments with AI Support (CMAAS)
 
 [![Test Status](https://github.com/abodeuis/cmaas_utils/actions/workflows/testrunner.yml/badge.svg)](https://github.com/abodeuis/cmaas_utils/actions/workflows/testrunner.yml)
-[![pypi version](https://img.shields.io/pypi/v/rasterio)](https://pypi.org/project/rasterio/)
+[![pypi version](https://img.shields.io/badge/cmass_utils-v0.1-blue)](https://test.pypi.org/project/cmaas-utils/)
 
 
 ## Installation
-
-CMAAS_Utils is listed as a package on PyPI and can be installed with `pip` or your favorite PyPI package manager.
+The inital distribution of CMAAS_Utils is listed on test pypi and be install with `pip` or your favorite PyPI package manager.
 
 ```bash
-python -m pip install cmaas_utils
+python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps cmass-utils
 ```
 
 ## Examples 
