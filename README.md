@@ -10,7 +10,7 @@ This package contains common utility functions including structured data classes
 The inital distribution of CMAAS_Utils is listed on test pypi and be install with `pip` or your favorite PyPI package manager.
 
 ```bash
-python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps cmass-utils
+pip install -i https://test.pypi.org/simple/ cmaas-utils
 ```
 
 ## Examples 
