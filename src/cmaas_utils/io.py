@@ -362,7 +362,7 @@ def saveCMASSMap(filepath, map_data:CMAAS_Map):
     with open(filepath, 'w') as fh:
         json.dump(map_data.to_dict(), fh)
 
-def parallelLoadCMASSMaps(map_files, legend_path=None, layout_path=None, processes : int=multiprocessing.cpu_count()):
+def parallelLoadCMASSMapFromFiles(map_files, legend_path=None, layout_path=None, processes : int=multiprocessing.cpu_count()):
     """Load a list of maps in parallel with N processes. Returns a list of CMASS_Map objects"""
     # Build argument list
     map_args = []
@@ -382,7 +382,7 @@ def parallelLoadCMASSMaps(map_files, legend_path=None, layout_path=None, process
 
     # Load all files in parallel
     with multiprocessing.Pool(processes) as p:
-        results = p.starmap(loadCMASSMap, map_args)
+        results = p.starmap(loadCMAASMapFromFiles, map_args)
 
     return results
 # endregion CMAAS Map IO
