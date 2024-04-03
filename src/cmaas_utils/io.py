@@ -6,7 +6,7 @@ import numpy as np
 import geopandas as gpd
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
-from src.cmaas_utils.types import CMAAS_Map, CMAAS_MapMetadata, Layout, Legend, GeoReference, MapUnit, MapUnitType, OCRText, TextUnit
+from .types import CMAAS_Map, CMAAS_MapMetadata, Layout, Legend, GeoReference, MapUnit, MapUnitType, OCRText, TextUnit
 from rasterio.crs import CRS
 from rasterio.control import GroundControlPoint
 
