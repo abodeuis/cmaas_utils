@@ -428,15 +428,11 @@ def _build_CDR_polygon_feature_collection(map_data: CMAAS_Map) -> cdr_schemas.fe
 
 def _build_CDR_polygon_result(map_data: CMAAS_Map) -> cdr_schemas.features.polygon_features.PolygonLegendAndFeauturesResult:
     id = 'None'
-    if map_data.georef is not None and map_data.georef.crs is not None:
-        crs = map_data.georef.crs.to_string()
-    else:
-        crs = 'ESP:4326'
     if map_data.mask is not None:
         poly_collection = _build_CDR_polygon_feature_collection(map_data)
     else:
         poly_collection = None
-    tmp = cdr_schemas.features.polygon_features.PolygonLegendAndFeauturesResult(id=id, crs=crs, cdr_projection_id=None, map_unit=None, abbreviation=None, legend_bbox=None, category=None, color=None, description=None, pattern=None, polygon_features=poly_collection)
+    tmp = cdr_schemas.features.polygon_features.PolygonLegendAndFeauturesResult(id=id, crs=None, cdr_projection_id=None, map_unit=None, abbreviation=None, legend_bbox=None, category=None, color=None, description=None, pattern=None, polygon_features=poly_collection)
     return tmp
 
 def export_CMAAS_Map_to_cdr_schema(map_data: CMAAS_Map):
