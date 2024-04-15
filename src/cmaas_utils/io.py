@@ -400,10 +400,8 @@ def _build_CDR_polygon(image, id, noise_threshold=10):
     # Get mask of feature
     feature_mask = np.zeros_like(image, dtype=np.uint8)
     feature_mask[image == id] = 1
-    print(image.shape)
-    print(feature_mask.shape)
     # Remove "noise" from mask by removing pixel groups smaller then the threshold
-    sieve_img = sieve(feature_mask, noise_threshold, connectivity=4)
+    #sieve_img = sieve(feature_mask, noise_threshold, connectivity=4)
     # Convert mask to vector shapes
     shape_gen = shapes(feature_mask, connectivity=4)
     # Only use Filled pixels (1s) for shapes 
@@ -427,12 +425,11 @@ def _build_CDR_polygon_feature_collection(map_data: CMAAS_Map) -> cdr_schemas.fe
     return tmp   
 
 def _build_CDR_polygon_result(map_data: CMAAS_Map) -> cdr_schemas.features.polygon_features.PolygonLegendAndFeauturesResult:
-    id = 'None'
     if map_data.mask is not None:
         poly_collection = _build_CDR_polygon_feature_collection(map_data)
     else:
         poly_collection = None
-    tmp = cdr_schemas.features.polygon_features.PolygonLegendAndFeauturesResult(id=id, crs=None, cdr_projection_id=None, map_unit=None, abbreviation=None, legend_bbox=None, category=None, color=None, description=None, pattern=None, polygon_features=poly_collection)
+    tmp = cdr_schemas.features.polygon_features.PolygonLegendAndFeauturesResult(id="None", crs="None", cdr_projection_id=None, map_unit=None, abbreviation=None, legend_bbox=None, category=None, color=None, description=None, pattern=None, polygon_features=poly_collection)
     return tmp
 
 def export_CMAAS_Map_to_cdr_schema(map_data: CMAAS_Map):
