@@ -85,12 +85,14 @@ def get_mock_map():
     map_data.ocrtext = OCRText(provenance='MockData')
     map_data.ocrtext.features.append(TextUnit(label='Mock text 1', geometry=np.array([[1.0,2.0],[3.0,4.0],[5.0,6.0],[7.0,8.0]]), confidence=0.9))
     map_data.ocrtext.features.append(TextUnit(label='Mock text 2', geometry=np.array([[9.0,10.0],[11.0,12.0],[13.0,14.0],[15.0,16.0]]), confidence=0.7))
+    # Mask
+    map_data.mask = None # Intentionally left as None
     return map_data
 
 def get_rectify2_LawrenceHoffmann_map():
     map_data = CMAAS_Map(name="rectify2_LawrenceHoffmann")
     # Image
-    map_data.image = image=np.zeros((3,3791,5476), dtype=np.uint8)
+    map_data.image = np.zeros((3,3791,5476), dtype=np.uint8)
     # Metadata
     map_data.metadata = None
     # Layout
@@ -111,5 +113,14 @@ def get_rectify2_LawrenceHoffmann_map():
     map_data.georeference = []
     # OCRText
     map_data.ocrtext = None
+    # Mask
+    map_data.mask = np.zeros((3,3791,5476), dtype=np.uint8)
     return map_data
 # endregion Full Maps
+
+# region CDR Data
+def get_mock_feature_results():
+    raise NotImplementedError
+
+def get_rectify2_LawrenceHoffmann_feature_results():
+    raise NotImplementedError

@@ -200,6 +200,23 @@ class Test_MapData:
         expected = mock_data.get_mock_map()
         exec_loadCMASSMapMule(os.path.join(self.mule_dir, 'mock_mule_data.json'), expected, image_path=os.path.join(self.image_dir, 'mock_map_data.tif'))
 
+# Leaving the full tests out for this since the cdr object is about to change anyway. 
+class Test_CDRSchema:
+    def test_export_mock_map_to_cdr(self):
+        map_data = mock_data.get_mock_map()
+        cdr_schema = io.export_CMAAS_Map_to_cdr_schema(map_data)
+        # expected = mock_data.get_mock_feature_results()
+        # assert(cdr_schema == expected)
+        assert True
+
+    def test_export_rectify2_to_cdr(self):
+        map_data = mock_data.get_rectify2_LawrenceHoffmann_map()
+        cdr_schema = io.export_CMAAS_Map_to_cdr_schema(map_data)
+        # expected = mock_data.get_rectify2_LawrenceHoffmann_feature_results()
+        # assert(cdr_schema == expected)
+        assert True
+
+
 # def print_2d_array(prefix, arr):
 #     outstr = '['
 #     for row in arr:

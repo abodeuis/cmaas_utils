@@ -1,6 +1,7 @@
 numpy
 rasterio
 geopandas
+git+https://github.com/DARPA-CRITICALMAAS/cdr_schemas.git@v0.2.2+draft
 
 # Dev
 pytest
