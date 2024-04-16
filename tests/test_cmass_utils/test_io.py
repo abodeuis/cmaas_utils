@@ -118,14 +118,15 @@ class Test_LayoutData:
     # mock_layout_v1.json
     def test_load_mock_layout_v1(self):
         testfile = os.path.join(self.layout_dir, 'mock_layout_v1.json')
-        expected = mock_data.get_mock_uncharted_layout()      
+        expected = mock_data.get_mock_uncharted_layout()
         exec_loadUnchartedLayoutv1Json(testfile, expected)
         exec_loadLayoutJson(testfile, expected)
 
     # mock_layout_v2.json
     def test_load_mock_layout_v2(self):
         testfile = os.path.join(self.layout_dir, 'mock_layout_v2.json')
-        expected = mock_data.get_mock_uncharted_layout()      
+        expected = mock_data.get_mock_uncharted_layout()
+        expected.provenance.version = '0.2'
         exec_loadUnchartedLayoutv2Json(testfile, expected)
         exec_loadLayoutJson(testfile, expected)
 
@@ -199,23 +200,6 @@ class Test_MapData:
     def test_load_mock_mule(self):
         expected = mock_data.get_mock_map()
         exec_loadCMASSMapMule(os.path.join(self.mule_dir, 'mock_mule_data.json'), expected, image_path=os.path.join(self.image_dir, 'mock_map_data.tif'))
-
-# Leaving the full tests out for this since the cdr object is about to change anyway. 
-class Test_CDRSchema:
-    def test_export_mock_map_to_cdr(self):
-        map_data = mock_data.get_mock_map()
-        cdr_schema = io.export_CMAAS_Map_to_cdr_schema(map_data)
-        # expected = mock_data.get_mock_feature_results()
-        # assert(cdr_schema == expected)
-        assert True
-
-    def test_export_rectify2_to_cdr(self):
-        map_data = mock_data.get_rectify2_LawrenceHoffmann_map()
-        cdr_schema = io.export_CMAAS_Map_to_cdr_schema(map_data)
-        # expected = mock_data.get_rectify2_LawrenceHoffmann_feature_results()
-        # assert(cdr_schema == expected)
-        assert True
-
 
 # def print_2d_array(prefix, arr):
 #     outstr = '['

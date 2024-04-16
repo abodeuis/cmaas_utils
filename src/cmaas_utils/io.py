@@ -6,7 +6,7 @@ import numpy as np
 import geopandas as gpd
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
-from .types import CMAAS_Map, CMAAS_MapMetadata, Layout, Legend, GeoReference, MapUnit, MapUnitType, OCRText, TextUnit
+from .types import CMAAS_Map, CMAAS_MapMetadata, Layout, Legend, GeoReference, MapUnit, MapUnitType, OCRText, TextUnit, Provenance
 from rasterio.crs import CRS
 from rasterio.control import GroundControlPoint
 
@@ -24,7 +24,7 @@ def loadLegendJson(filepath:Path, type_filter:MapUnitType=MapUnitType.ALL()) -> 
 def _loadUSGSLegendJson(filepath:Path, type_filter:MapUnitType=MapUnitType.ALL()) -> Legend:
     with open(filepath, 'r') as fh:
         json_data = json.load(fh)
-    legend = Legend(provenance='USGS')
+    legend = Legend(provenance=Provenance(name='USGS', version='5.0.1'))
     for m in json_data['shapes']:
         # Filter out unwanted map unit types
         unit_type = MapUnitType.from_str(m['label'].split('_')[-1])
@@ -36,13 +36,13 @@ def _loadUSGSLegendJson(filepath:Path, type_filter:MapUnitType=MapUnitType.ALL()
         if unit_type != MapUnitType.UNKNOWN:
             unit_label = ' '.join(unit_label.split(' ')[:-1])
 
-        legend.features.append(MapUnit(label=unit_label, type=unit_type, bbox=np.array(m['points']).astype(int), provenance='USGS'))
+        legend.features.append(MapUnit(label=unit_label, type=unit_type, bounding_box=np.array(m['points']).astype(int)))
     return legend
 
 def _loadMULELegend(filepath:Path, type_filter:MapUnitType=MapUnitType.ALL()) -> Legend:
     with open(filepath, 'r') as fh:
         json_data = json.load(fh)
-    legend = Legend(provenance='MULE')
+    legend = Legend(provenance=Provenance(name='MULE', version='0.1'))
     # TODO - Implement MULE legend loading
     raise NotImplementedError('MULE legend loading not yet implemented')
     return legend
@@ -79,8 +79,7 @@ def loadLayoutJson(filepath:Path) -> Layout:
     return layout
 
 def _loadUnchartedLayoutv1Json(filepath:Path) -> Layout:
-    layout = Layout()
-    layout.provenance = 'Uncharted'
+    layout = Layout(provenance=Provenance(name='Uncharted', version='0.1'))
     with open(filepath, 'r') as fh:
         json_data = json.load(fh)
 
@@ -104,8 +103,7 @@ def _loadUnchartedLayoutv1Json(filepath:Path) -> Layout:
     return layout
 
 def _loadUnchartedLayoutv2Json(filepath:Path) -> Layout:
-    layout = Layout()
-    layout.provenance = 'Uncharted'
+    layout = Layout(provenance=Provenance(name='Uncharted', version='0.2'))
     with open(filepath, 'r') as fh:
         for line in fh:
             json_data = json.loads(line)
@@ -385,63 +383,3 @@ def parallelLoadCMASSMapFromFiles(map_files, legend_path=None, layout_path=None,
 
     return results
 # endregion CMAAS Map IO
-
-# region CDR Schema
-import cdr_schemas.features.polygon_features
-import cdr_schemas.feature_results
-from rasterio.features import shapes, sieve 
-from shapely.geometry import shape
-
-def _build_CDR_polygon_property():
-    tmp = cdr_schemas.features.polygon_features.PolygonProperty(model='Testing', model_version='0.1', confidence=0.9)
-    return tmp
-
-def _build_CDR_polygon(image, id, noise_threshold=10):
-    # Get mask of feature
-    feature_mask = np.zeros_like(image, dtype=np.uint8)
-    feature_mask[image == id] = 1
-    # Remove "noise" from mask by removing pixel groups smaller then the threshold
-    #sieve_img = sieve(feature_mask, noise_threshold, connectivity=4)
-    # Convert mask to vector shapes
-    shape_gen = shapes(feature_mask, connectivity=4)
-    # Only use Filled pixels (1s) for shapes 
-    geometries = [shape(geometry) for geometry, value in shape_gen if value == 1]
-    # Change Shapely geometryies to List(List(List(float)))
-
-    cdr_geometries = [[[*point] for point in geometry.exterior.coords] for geometry in geometries]
-    tmp = cdr_schemas.features.polygon_features.Polygon(coordinates=cdr_geometries)
-    return tmp
-
-def _build_CDR_polygon_feature_collection(map_data: CMAAS_Map) -> cdr_schemas.features.polygon_features.PolygonFeatureCollection:
-    cdr_features = []
-    id = 1
-    for label, feature in enumerate(map_data.legend.features):
-        cdr_poly = _build_CDR_polygon(map_data.mask, id)
-        cdr_properties = _build_CDR_polygon_property()
-        poly_feature = cdr_schemas.features.polygon_features.PolygonFeature(id=f'{id}', geometry=cdr_poly, properties=cdr_properties)
-        cdr_features.append(poly_feature)
-        id += 1
-    tmp = cdr_schemas.features.polygon_features.PolygonFeatureCollection(features=cdr_features)
-    return tmp   
-
-def _build_CDR_polygon_result(map_data: CMAAS_Map) -> cdr_schemas.features.polygon_features.PolygonLegendAndFeauturesResult:
-    if map_data.mask is not None:
-        poly_collection = _build_CDR_polygon_feature_collection(map_data)
-    else:
-        poly_collection = None
-    tmp = cdr_schemas.features.polygon_features.PolygonLegendAndFeauturesResult(id="None", crs="None", cdr_projection_id=None, map_unit=None, abbreviation=None, legend_bbox=None, category=None, color=None, description=None, pattern=None, polygon_features=poly_collection)
-    return tmp
-
-def export_CMAAS_Map_to_cdr_schema(map_data: CMAAS_Map):
-    cog_id='NEED FROM EXTERNAL SOURCE'
-    system='NEED FROM EXTERNAL SOURCE'
-    system_version='NEED FROM EXTERNAL SOURCE'
-    polygon_result = [_build_CDR_polygon_result(map_data)]
-    cdr_result = cdr_schemas.feature_results.FeatureResults(cog_id=cog_id, system=system, line_feature_results=None, point_feature_results=None, cog_area_extractions=None, cog_metadata_extractions=None, system_version=system_version, polygon_feature_results=polygon_result)
-    return cdr_result
-
-def saveCDRFeatureResults(filepath, feature_result: cdr_schemas.feature_results):
-    # Save CDR schema
-    with open(filepath, 'w') as fh:
-        fh.write(feature_result.model_dump_json())
-# endregion CDR Schema
