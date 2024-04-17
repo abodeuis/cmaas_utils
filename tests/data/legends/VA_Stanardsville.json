@@ -1,0 +1,90 @@
+{
+  "version": "5.0.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "Qa_poly",
+      "points": [
+        [
+          5848.051948051948,
+          2671.4285714285716
+        ],
+        [
+          5972.727272727273,
+          2729.220779220779
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "Qdf_poly",
+      "points": [
+        [
+          5853.896103896103,
+          2890.2597402597403
+        ],
+        [
+          5979.87012987013,
+          2948.7012987012986
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "QNt_poly",
+      "points": [
+        [
+          5859.74025974026,
+          3109.090909090909
+        ],
+        [
+          5986.363636363636,
+          3169.4805194805194
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "QNd_poly",
+      "points": [
+        [
+          5866.233766233766,
+          3329.87012987013
+        ],
+        [
+          5992.207792207792,
+          3388.311688311688
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "thrust_fault_line",
+      "points": [
+        [
+          5977.922077922078,
+          7545.454545454545
+        ],
+        [
+          6118.831168831169,
+          7584.415584415584
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "VA_Stanardsville.tif",
+  "imageData": null,
+  "imageHeight": 10304,
+  "imageWidth": 12169
+}

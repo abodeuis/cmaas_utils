@@ -1,11 +1,15 @@
+import numpy as np
+from enum import Enum
+from typing import List, Optional
+from shapely.geometry import shape
+from pydantic import BaseModel, Field
+
 import rasterio
 from rasterio.crs import CRS
-from rasterio.control import GroundControlPoint
-from rasterio.transform import from_gcps
-from enum import Enum
-from typing import List, Tuple, Optional
-import numpy as np
-from pydantic import BaseModel, Field
+from rasterio.features import shapes, sieve 
+# from rasterio.control import GroundControlPoint
+# from rasterio.transform import from_gcps
+
 
 DEBUG_MODE = True # Turns on debuging why two objects are not equal
 
@@ -648,6 +652,33 @@ class CMAAS_Map(BaseModel):
         description="""The polygon map unit segmentation mask. This is a single image with the value of each pixel
                     being the map units index in the legend.features""")
     
+    def generate_geometry_from_masks(self, mask_provenance:Provenance):
+        # if self.point_segmentation_mask is not None:
+            
+        if self.poly_segmentation_mask is not None:
+            self._generate_poly_geometry(mask_provenance)
+
+    def _generate_poly_geometry(self, mask_provenance:Provenance, noise_threshold=10):
+        legend_index = 1
+        for feature in self.legend.features:
+            # Get mask of feature
+            feature_mask = np.zeros_like(self.poly_segmentation_mask, dtype=np.uint8)
+            feature_mask[self.poly_segmentation_mask == legend_index] = 1
+            # Remove "noise" from mask by removing pixel groups smaller then the threshold
+            sieve_img = sieve(feature_mask, noise_threshold, connectivity=4)
+            # Convert mask to vector shapes
+            shape_gen = shapes(sieve_img, connectivity=4)
+            # Only use Filled pixels (1s) for shapes 
+            geometries = [shape(geometry) for geometry, value in shape_gen if value == 1]
+            # Change Shapely geometryies to List(List(List(float)))
+            poly_geometry = [[[*point] for point in geometry.exterior.coords] for geometry in geometries]
+            if feature.segmentation is None:
+                feature.segmentation = MapUnitSegmentation(provenance=mask_provenance, geometry=poly_geometry)
+            else:
+                feature.segmentation.geometry = poly_geometry
+            legend_index += 1
+
+
     class Config:
         arbitrary_types_allowed = True
     

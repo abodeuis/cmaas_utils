@@ -100,25 +100,3 @@ def _build_CDR_polygon(geometry: List[List[float]]) -> Polygon:
 def _build_CDR_polygon_property(provenance: Provenance) -> PolygonProperty:
     return PolygonProperty(model=provenance.name, model_version=provenance.version)  
 # endregion CDR Polygon
-
-# region CDR Schema
-from rasterio.features import shapes, sieve 
-from shapely.geometry import shape
-import numpy as np
-# def _build_CDR_polygon(image, id, noise_threshold=10):
-#     # Get mask of feature
-#     feature_mask = np.zeros_like(image, dtype=np.uint8)
-#     feature_mask[image == id] = 1
-#     # Remove "noise" from mask by removing pixel groups smaller then the threshold
-#     #sieve_img = sieve(feature_mask, noise_threshold, connectivity=4)
-#     # Convert mask to vector shapes
-#     shape_gen = shapes(feature_mask, connectivity=4)
-#     # Only use Filled pixels (1s) for shapes 
-#     geometries = [shape(geometry) for geometry, value in shape_gen if value == 1]
-#     # Change Shapely geometryies to List(List(List(float)))
-
-#     cdr_geometries = [[[*point] for point in geometry.exterior.coords] for geometry in geometries]
-#     tmp = cdr_schemas.features.polygon_features.Polygon(coordinates=cdr_geometries)
-#     return tmp
-
-# endregion CDR Schema

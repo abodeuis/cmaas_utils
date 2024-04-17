@@ -1,6 +1,7 @@
 import numpy as np
 from src.cmaas_utils.types import CMAAS_Map, CMAAS_MapMetadata, GeoReference, Layout, Legend, MapUnit, MapUnitSegmentation, MapUnitType, Provenance, TextUnit, OCRText
 from rasterio.crs import CRS
+import src.cmaas_utils.io as io
 
 class Test_Provenance():
     def test_provenance_creation(self):
@@ -211,3 +212,14 @@ class Test_CMAAS_Map:
         assert cmaas_map.image is None
         assert cmaas_map.metadata == metadata
         assert cmaas_map.layout == layout
+
+    def test_geometry_generation(self):
+        map_data = CMAAS_Map(name='VA_Stanardsville')
+        map_data.legend = io.loadLegendJson('tests/data/legends/VA_Stanardsville.json')
+        map_data.poly_segmentation_mask = io.loadGeoTiff('tests/data/segmentations/VA_Stanardsville_poly_segmentation.tif')[0]
+        
+        print(f'shape : {map_data.poly_segmentation_mask.shape}')
+        map_data.generate_geometry_from_masks(Provenance(name='test', version='0.1'))
+        # Just testing that the function executes without error
+        assert True
+
