@@ -36,10 +36,10 @@ def _build_CDR_point_feature(feature: MapUnit, legend_provenance: Provenance) ->
     point_feature = PointLegendAndFeaturesResult(
         id="None",
         legend_provenance=_build_CDR_provenance(legend_provenance),
-        name=feature.label,
-        abbreviation=feature.abbreviation,
-        description=feature.description,
-        legend_contour=feature.bounding_box,
+        name=feature.label if feature.label is not None else "",
+        abbreviation=feature.abbreviation if feature.abbreviation is not None else "",
+        description=feature.description if feature.description is not None else "",
+        legend_contour=feature.bounding_box if feature.bounding_box is not None else [],
         point_features=point_collection)
     return point_feature
 
@@ -74,12 +74,12 @@ def _build_CDR_poly_feature(feature: MapUnit, legend_provenance: Provenance) -> 
     poly_feature = PolygonLegendAndFeaturesResult(
         id="None",
         legend_provenance=_build_CDR_provenance(legend_provenance),
-        label=feature.label,
-        abbreviation=feature.abbreviation,
-        description=feature.description,
-        legend_contour=feature.bounding_box,
-        color=feature.color,
-        pattern=feature.pattern,
+        label=feature.label if feature.label is not None else "",
+        abbreviation=feature.abbreviation if feature.abbreviation is not None else "",
+        description=feature.description if feature.description is not None else "",
+        legend_contour=feature.bounding_box if feature.bounding_box is not None else [],
+        color=feature.color if feature.color is not None else "",
+        pattern=feature.pattern if feature.pattern is not None else "",
         polygon_features=poly_collection)
     return poly_feature
 
