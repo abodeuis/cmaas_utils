@@ -9,11 +9,11 @@ from .types import CMAAS_Map, MapUnit, MapUnitType, MapUnitSegmentation, Provena
 def export_CMAAS_Map_to_cdr_schema(map_data: CMAAS_Map, cog_id:str='', system:str='UIUC', system_version:str='0.1'):
     point_segmentations = []
     for feature in map_data.legend.features:
-        if feature.type == MapUnitType.Point:
+        if feature.type == MapUnitType.POINT:
             point_segmentations.append(_build_CDR_point_feature(feature, map_data.legend.provenance))
     polygon_segmentations = []
     for feature in map_data.legend.features:
-        if feature.type == MapUnitType.Polygon:
+        if feature.type == MapUnitType.POLYGON:
             polygon_segmentations.append(_build_CDR_poly_feature(feature, map_data.legend.provenance))
     return FeatureResults(cog_id=cog_id, system=system, system_version=system_version, point_feature_results=point_segmentations, polygon_feature_results=polygon_segmentations)
 

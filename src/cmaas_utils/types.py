@@ -57,7 +57,8 @@ class MapUnitType(Enum):
 class Provenance(BaseModel):
     name : str = Field(    
         description='The name of the model used to generate the data')
-    version : str = Field(
+    version : Optional[str] = Field(
+        default=None,
         description='The version of the model used to generate the data')
     
     # def __eq__(self, __value: object) -> bool:
@@ -134,12 +135,13 @@ class MapUnit(BaseModel):
     #     }
     
     # def __eq__(self, __value: object) -> bool:
+    #     # Check if either self or __value is None
     #     if self is None or __value is None:
     #         if self is None and __value is None:
     #             return True
     #         else:
     #             return False
-            
+    #     # Check individual fields match
     #     if self.type != __value.type:
     #         if DEBUG_MODE:
     #             print(f'Type Mismatch: {self.type} != {__value.type}')
@@ -168,20 +170,16 @@ class MapUnit(BaseModel):
     #         if DEBUG_MODE:
     #             print(f'Overlay Mismatch: {self.overlay} != {__value.overlay}')
     #         return False
-    #     if isinstance(self.bbox, (np.ndarray, np.generic)) or isinstance(__value.bbox, (np.ndarray, np.generic)):
-    #         if (self.bbox != __value.bbox).any():
-    #             if DEBUG_MODE:
-    #                 print(f'Bounding Box Mismatch: {self.bbox} != {__value.bbox}')
-    #             return False
+    #     # if isinstance(self.bounding_box, (np.ndarray, np.generic)) or isinstance(__value.bounding_box, (np.ndarray, np.generic)):
+    #     #     if (self.bounding_box != __value.bounding_box).any():
+    #     #         if DEBUG_MODE:
+    #     #             print(f'Bounding Box Mismatch: {self.bounding_box} != {__value.bounding_box}')
+    #     #         return False
     #     else:
-    #         if self.bbox != __value.bbox:
+    #         if self.bounding_box != __value.bounding_box:
     #             if DEBUG_MODE:
-    #                 print(f'Bounding Box Mismatch: {self.bbox} != {__value.bbox}')
+    #                 print(f'Bounding Box Mismatch: {self.bounding_box} != {__value.bounding_box}')
     #             return False
-    #     if self.provenance != __value.provenance:
-    #         if DEBUG_MODE:
-    #             print(f'Provenance Mismatch: {self.provenance} != {__value.provenance}')
-    #         return False
     #     return True
 
     def __str__(self) -> str:
@@ -232,29 +230,31 @@ class Legend(BaseModel):
     def __len__(self):
         return len(self.features)
     
-    # def __eq__(self, __value: object) -> bool:
-    #     if self is None or __value is None:
-    #         if self is None and __value is None:
-    #             return True
-    #         else:
-    #             return False
-    #     if self.provenance != __value.provenance:
-    #         if DEBUG_MODE:
-    #             print(f'Provenance Mismatch: {self.provenance} != {__value.provenance}')
-    #         return False
-    #     for u1 in self.features:
-    #         matched = False
-    #         for u2 in __value.features:
-    #             if u1 == u2:
-    #                 if DEBUG_MODE:
-    #                     print(f'Feature match: {u1} == {u2}')
-    #                 matched = True
-    #                 break
-    #         if not matched:
-    #             if DEBUG_MODE:
-    #                 print(f'Feature Mismatch: {u1} != {u2}')
-    #             return False
-    #     return True
+    def __eq__(self, __value: object) -> bool:
+        if self is None or __value is None:
+            if self is None and __value is None:
+                return True
+            else:
+                return False
+        # if self.provenance != __value.provenance:
+        #     if DEBUG_MODE:
+        #         print(f'Provenance Mismatch: {self.provenance} != {__value.provenance}')
+        #     return False
+        for u1 in self.features:
+            matched = False
+            for u2 in __value.features:
+                if DEBUG_MODE:
+                    print(f'Comparing {u1} and {u2}')
+                if u1 == u2:
+                    if DEBUG_MODE:
+                        print(f'Feature match: {u1} == {u2}')
+                    matched = True
+                    break
+            if not matched:
+                if DEBUG_MODE:
+                    print(f'Feature Mismatch: {u1} != {u2}')
+                return False
+        return True
 
     def __str__(self) -> str:
         out_str = 'Legend{Provenance : ' + f'{self.provenance}, {len(self.features)} Features : {self.features}' + '}'
@@ -316,78 +316,78 @@ class Layout(BaseModel):
         out_str += '}'
         return out_str
 
-    # def __eq__(self, __value: object) -> bool:
-    #     if self is None or __value is None:
-    #         if self is None and __value is None:
-    #             return True
-    #         else:
-    #             return False
-    #     if self.provenance != __value.provenance:
-    #         if DEBUG_MODE:
-    #             print(f'Provenance Mismatch: {self.provenance} != {__value.provenance}')
-    #         return False
-    #     if isinstance(self.map, (np.ndarray, np.generic)) and isinstance(__value.map, (np.ndarray, np.generic)):
-    #         if (self.map != __value.map).any():
-    #             if DEBUG_MODE:
-    #                 print(f'Map Mismatch: {self.map} != {__value.map}')
-    #             return False
-    #     else:
-    #         if self.map != __value.map:
-    #             if DEBUG_MODE:
-    #                 print(f'Map Mismatch: {self.map} != {__value.map}')
-    #             return False
-    #     if isinstance(self.correlation_diagram, (np.ndarray, np.generic)) or isinstance(__value.correlation_diagram, (np.ndarray, np.generic)):
-    #         if (self.correlation_diagram != __value.correlation_diagram).any():
-    #             if DEBUG_MODE:
-    #                 print(f'Correlation Diagram Mismatch: {self.correlation_diagram} != {__value.correlation_diagram}')
-    #             return False
-    #     else:
-    #         if self.correlation_diagram != __value.correlation_diagram:
-    #             if DEBUG_MODE:
-    #                 print(f'Correlation Diagram Mismatch: {self.correlation_diagram} != {__value.correlation_diagram}')
-    #             return False
-    #     if isinstance(self.cross_section, (np.ndarray, np.generic)) or isinstance(__value.cross_section, (np.ndarray, np.generic)):
-    #         if (self.cross_section != __value.cross_section).any():
-    #             if DEBUG_MODE:
-    #                 print(f'Cross Section Mismatch: {self.cross_section} != {__value.cross_section}')
-    #             return False
-    #     else:
-    #         if self.cross_section != __value.cross_section:
-    #             if DEBUG_MODE:
-    #                 print(f'Cross Section Mismatch: {self.cross_section} != {__value.cross_section}')
-    #             return False
-    #     if isinstance(self.point_legend, (np.ndarray, np.generic)) or isinstance(__value.point_legend, (np.ndarray, np.generic)):
-    #         if (self.point_legend != __value.point_legend).any():
-    #             if DEBUG_MODE:
-    #                 print(f'Point Legend Mismatch: {self.point_legend} != {__value.point_legend}')
-    #             return False
-    #     else:
-    #         if self.point_legend != __value.point_legend:
-    #             if DEBUG_MODE:
-    #                 print(f'Point Legend Mismatch: {self.point_legend} != {__value.point_legend}')
-    #             return False
-    #     if isinstance(self.line_legend, (np.ndarray, np.generic)) or isinstance(__value.line_legend, (np.ndarray, np.generic)):
-    #         if (self.line_legend != __value.line_legend).any():
-    #             if DEBUG_MODE:
-    #                 print(f'Line Legend Mismatch: {self.line_legend} != {__value.line_legend}')
-    #             return False
-    #     else:
-    #         if self.line_legend != __value.line_legend:
-    #             if DEBUG_MODE:
-    #                 print(f'Line Legend Mismatch: {self.line_legend} != {__value.line_legend}')
-    #             return False
-    #     if isinstance(self.polygon_legend, (np.ndarray, np.generic)) or isinstance(__value.polygon_legend, (np.ndarray, np.generic)):
-    #         if (self.polygon_legend != __value.polygon_legend).any():
-    #             if DEBUG_MODE:
-    #                 print(f'Polygon Legend Mismatch: {self.polygon_legend} != {__value.polygon_legend}')
-    #             return False
-    #     else:
-    #         if self.polygon_legend != __value.polygon_legend:
-    #             if DEBUG_MODE:
-    #                 print(f'Polygon Legend Mismatch: {self.polygon_legend} != {__value.polygon_legend}')
-    #             return False
+    def __eq__(self, __value: object) -> bool:
+        if self is None or __value is None:
+            if self is None and __value is None:
+                return True
+            else:
+                return False
+        # if self.provenance != __value.provenance:
+        #     if DEBUG_MODE:
+        #         print(f'Provenance Mismatch: {self.provenance} != {__value.provenance}')
+        #     return False
+        if isinstance(self.map, (np.ndarray, np.generic)) and isinstance(__value.map, (np.ndarray, np.generic)):
+            if (self.map != __value.map).any():
+                if DEBUG_MODE:
+                    print(f'Map Mismatch: {self.map} != {__value.map}')
+                return False
+        else:
+            if self.map != __value.map:
+                if DEBUG_MODE:
+                    print(f'Map Mismatch: {self.map} != {__value.map}')
+                return False
+        if isinstance(self.correlation_diagram, (np.ndarray, np.generic)) or isinstance(__value.correlation_diagram, (np.ndarray, np.generic)):
+            if (self.correlation_diagram != __value.correlation_diagram).any():
+                if DEBUG_MODE:
+                    print(f'Correlation Diagram Mismatch: {self.correlation_diagram} != {__value.correlation_diagram}')
+                return False
+        else:
+            if self.correlation_diagram != __value.correlation_diagram:
+                if DEBUG_MODE:
+                    print(f'Correlation Diagram Mismatch: {self.correlation_diagram} != {__value.correlation_diagram}')
+                return False
+        if isinstance(self.cross_section, (np.ndarray, np.generic)) or isinstance(__value.cross_section, (np.ndarray, np.generic)):
+            if (self.cross_section != __value.cross_section).any():
+                if DEBUG_MODE:
+                    print(f'Cross Section Mismatch: {self.cross_section} != {__value.cross_section}')
+                return False
+        else:
+            if self.cross_section != __value.cross_section:
+                if DEBUG_MODE:
+                    print(f'Cross Section Mismatch: {self.cross_section} != {__value.cross_section}')
+                return False
+        if isinstance(self.point_legend, (np.ndarray, np.generic)) or isinstance(__value.point_legend, (np.ndarray, np.generic)):
+            if (self.point_legend != __value.point_legend).any():
+                if DEBUG_MODE:
+                    print(f'Point Legend Mismatch: {self.point_legend} != {__value.point_legend}')
+                return False
+        else:
+            if self.point_legend != __value.point_legend:
+                if DEBUG_MODE:
+                    print(f'Point Legend Mismatch: {self.point_legend} != {__value.point_legend}')
+                return False
+        if isinstance(self.line_legend, (np.ndarray, np.generic)) or isinstance(__value.line_legend, (np.ndarray, np.generic)):
+            if (self.line_legend != __value.line_legend).any():
+                if DEBUG_MODE:
+                    print(f'Line Legend Mismatch: {self.line_legend} != {__value.line_legend}')
+                return False
+        else:
+            if self.line_legend != __value.line_legend:
+                if DEBUG_MODE:
+                    print(f'Line Legend Mismatch: {self.line_legend} != {__value.line_legend}')
+                return False
+        if isinstance(self.polygon_legend, (np.ndarray, np.generic)) or isinstance(__value.polygon_legend, (np.ndarray, np.generic)):
+            if (self.polygon_legend != __value.polygon_legend).any():
+                if DEBUG_MODE:
+                    print(f'Polygon Legend Mismatch: {self.polygon_legend} != {__value.polygon_legend}')
+                return False
+        else:
+            if self.polygon_legend != __value.polygon_legend:
+                if DEBUG_MODE:
+                    print(f'Polygon Legend Mismatch: {self.polygon_legend} != {__value.polygon_legend}')
+                return False
         
-    #     return True
+        return True
     
     def to_dict(self):
         return {
@@ -406,45 +406,40 @@ class GeoReference(BaseModel):
     """
     provenance : Provenance = Field(
         description='Information about the source the GeoReference orginated from')
-    crs : Optional[str] = Field(
+    crs : Optional[CRS] = Field(
         default=None,
         description="""The EPSG number for the crs. Should be in the format "EPSG:####" or an equivelent that can be
                     read by rasterio.CRS.from_string()""")
-    # transform : Optional[rasterio.transform.Affine] = Field(
-    #     default=None,
-    #     description='The affine transformation matrix for the map')
+    transform : Optional[rasterio.transform.Affine] = Field(
+        default=None,
+        description='The affine transformation matrix for the map')
+    
+    class Config:
+        arbitrary_types_allowed = True
     # gcps : Optional[List[GroundControlPoint]] = Field(
     #     default=None,
     #     description='List of ground control points that can be used to create the transform and crs')
 
-    # def __eq__(self, __value: object) -> bool:
-    #     if self is None or __value is None:
-    #         if self is None and __value is None:
-    #             return True
-    #         else:
-    #             return False
+
+
+    def __eq__(self, __value: object) -> bool:
+        if self is None or __value is None:
+            if self is None and __value is None:
+                return True
+            else:
+                return False
             
-    #     # Mark an object as equal if its crs and transform are equal
-    #     if self.crs is not None and self.transform is not None and __value.crs is not None and __value.transform is not None:
-    #         if self.crs != __value.crs:
-    #             if DEBUG_MODE:
-    #                 print(f'CRS Mismatch: {self.crs} != {__value.crs}')
-    #             return False
-    #         if self.transform != __value.transform:
-    #             if DEBUG_MODE:
-    #                 print(f'Transform Mismatch: {self.transform} != {__value.transform}')
-    #             return False
-    #     # Otherwise test on the gcps and provenance
-    #     else:
-    #         if self.gcps != __value.gcps:
-    #             if DEBUG_MODE:
-    #                 print(f'GCP Mismatch: {self.gcps} != {__value.gcps}')
-    #             return False
-    #         if self.provenance != __value.provenance:
-    #             if DEBUG_MODE:
-    #                 print(f'Provenance Mismatch: {self.provenance} != {__value.provenance}')
-    #             return False
-    #     return True
+        if self.crs is not None and self.transform is not None and __value.crs is not None and __value.transform is not None:
+            if self.crs != __value.crs:
+                if DEBUG_MODE:
+                    print(f'CRS Mismatch: {self.crs} != {__value.crs}')
+                return False
+            if self.transform != __value.transform:
+                if DEBUG_MODE:
+                    print(f'Transform Mismatch: {self.transform} != {__value.transform}')
+                return False
+
+        return True
 
 class TextUnit(BaseModel):
     """
@@ -454,7 +449,8 @@ class TextUnit(BaseModel):
         description='The text contained in the unit')
     geometry : List[List[float]] = Field(
         description='The geometry of the text unit')
-    confidence : float = Field(
+    confidence : Optional[float] = Field(
+        default=None,
         description='The confidence of the OCR model')
     
 
@@ -465,6 +461,7 @@ class OCRText(BaseModel):
     provenance : Provenance = Field(
         description='Information about the source the OCR text orginated from')
     features : List[TextUnit] = Field(
+        default=[],
         description='The individual text units in the map')
         
 class CMAAS_MapMetadata(BaseModel):

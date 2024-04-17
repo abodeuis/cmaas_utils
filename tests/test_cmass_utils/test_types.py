@@ -1,6 +1,6 @@
 import numpy as np
 from src.cmaas_utils.types import CMAAS_Map, CMAAS_MapMetadata, GeoReference, Layout, Legend, MapUnit, MapUnitSegmentation, MapUnitType, Provenance, TextUnit, OCRText
-
+from rasterio.crs import CRS
 
 class Test_Provenance():
     def test_provenance_creation(self):
@@ -105,11 +105,11 @@ class Test_GeoReference():
         prov = Provenance(name='test', version='0.1')
 
         # Create a georeference object
-        georef = GeoReference(provenance=prov, crs='EPSG:4326')
+        georef = GeoReference(provenance=prov, crs=CRS.from_string('EPSG:4326'))
 
         # Check the attributes of the georeference
         assert georef.provenance == prov
-        assert georef.crs == 'EPSG:4326'
+        assert georef.crs == CRS.from_epsg(4326)
 
 class Test_TextUnit:
     def test_text_unit_creation(self):

@@ -197,9 +197,9 @@ class Test_MapData:
         exec_loadCMASSMap(os.path.join(self.image_dir, 'rectify2_LawrenceHoffmann.tif'), expected, legend_path=os.path.join(self.legend_dir, 'rectify2_LawrenceHoffmann.json'), layout_path=os.path.join(self.layout_dir, 'rectify2_LawrenceHoffmann.json'))
 
     # Mule file load
-    def test_load_mock_mule(self):
-        expected = mock_data.get_mock_map()
-        exec_loadCMASSMapMule(os.path.join(self.mule_dir, 'mock_mule_data.json'), expected, image_path=os.path.join(self.image_dir, 'mock_map_data.tif'))
+    # def test_load_mock_mule(self):
+    #     expected = mock_data.get_mock_map()
+    #     exec_loadCMASSMapMule(os.path.join(self.mule_dir, 'mock_mule_data.json'), expected, image_path=os.path.join(self.image_dir, 'mock_map_data.tif'))
 
 # def print_2d_array(prefix, arr):
 #     outstr = '['

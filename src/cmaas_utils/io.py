@@ -141,24 +141,24 @@ def parallelLoadLayouts(filepaths, threads:int=32):
 
 # region GeoReference
 # TODO
-def loadGeoReference(filepath:Path) -> GeoReference:
-    # TODO
-    raise NotImplementedError('GeoReference loading not yet implemented')
+# def loadGeoReference(filepath:Path) -> GeoReference:
+#     # TODO
+#     raise NotImplementedError('GeoReference loading not yet implemented')
 
-def saveMULEGeoReference(filepath:Path, georef:GeoReference):
-    # TODO
-    raise NotImplementedError('MULE georef saving not yet implemented')
+# def saveMULEGeoReference(filepath:Path, georef:GeoReference):
+#     # TODO
+#     raise NotImplementedError('MULE georef saving not yet implemented')
 # endregion GeoReference
 
 # region Map Metadata
 # TODO
-def loadMapMetadata(filepath:Path):
-    # TODO
-    raise NotImplementedError('Map metadata loading not yet implemented')
+# def loadMapMetadata(filepath:Path):
+#     # TODO
+#     raise NotImplementedError('Map metadata loading not yet implemented')
 
-def saveMULEMapMetadata(filepath:Path, metadata):
-    # TODO
-    raise NotImplementedError('MULE metadata saving not yet implemented')
+# def saveMULEMapMetadata(filepath:Path, metadata):
+#     # TODO
+#     raise NotImplementedError('MULE metadata saving not yet implemented')
 # endregion Map Metadata
 
 # region GeoTiff
@@ -216,11 +216,11 @@ def loadCMAASMapFromFiles(image_path:Path, legend_path:Path=None, layout_path:Pa
         # if georef_path is not None:
         #     georef = gr_future.result()
         # else:
-        georef = GeoReference(crs=crs, transform=transform, provenance='GeoTIFF')
+        georef = GeoReference(provenance=Provenance(name='GeoTIFF'), crs=crs, transform=transform)
         # if metadata_path is not None:
         #     metadata = md_future.result()
     
-    map_data = CMAAS_Map(map_name, image, georef=georef)
+    map_data = CMAAS_Map(name=map_name, image=image, georef=georef)
     if legend_path is not None:
         map_data.legend = legend
     if layout_path is not None:
@@ -350,7 +350,7 @@ def loadCMAASMap(json_path:Path, image_path:Path=None) -> CMAAS_Map:
             map_data.image = image
             # Add GeoTiff Georeferencing at front of list. This will be the default if it exists
             if crs is not None and transform is not None:
-                map_data.georef.insert(0, GeoReference(provenance='GeoTIFF', crs=crs, transform=transform, confidence=1.0))
+                map_data.georef.insert(0, GeoReference(provenance=Provenance(name='GeoTiff'), crs=crs, transform=transform))
     return map_data
 
 def saveCMASSMap(filepath, map_data:CMAAS_Map):
