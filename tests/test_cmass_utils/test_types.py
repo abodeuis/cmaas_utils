@@ -218,7 +218,6 @@ class Test_CMAAS_Map:
         map_data.legend = io.loadLegendJson('tests/data/legends/VA_Stanardsville.json')
         map_data.poly_segmentation_mask = io.loadGeoTiff('tests/data/segmentations/VA_Stanardsville_poly_segmentation.tif')[0]
         
-        print(f'shape : {map_data.poly_segmentation_mask.shape}')
         map_data.generate_geometry_from_masks(Provenance(name='test', version='0.1'))
         # Just testing that the function executes without error
         assert True

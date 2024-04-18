@@ -196,6 +196,24 @@ class Test_MapData:
         expected = mock_data.get_rectify2_LawrenceHoffmann_map()
         exec_loadCMASSMap(os.path.join(self.image_dir, 'rectify2_LawrenceHoffmann.tif'), expected, legend_path=os.path.join(self.legend_dir, 'rectify2_LawrenceHoffmann.json'), layout_path=os.path.join(self.layout_dir, 'rectify2_LawrenceHoffmann.json'))
 
+    def test_save_geopackage_pixel(self):
+        from src.cmaas_utils.types import Provenance
+        map_data = CMAAS_Map(name='VA_Stanardsville')
+        map_data.legend = io.loadLegendJson('tests/data/legends/VA_Stanardsville.json')
+        map_data.poly_segmentation_mask = io.loadGeoTiff('tests/data/segmentations/VA_Stanardsville_poly_segmentation.tif')[0]
+        
+        map_data.generate_geometry_from_masks(Provenance(name='test', version='0.1'))
+        io.saveGeoPackage('tests/data/tmp.gpkg', map_data, coord_type='pixel')
+        assert True
+
+    def test_save_geopackage_georeferenced(self):
+        from src.cmaas_utils.types import Provenance
+        map_data = io.loadCMAASMapFromFiles('tests/data/images/VA_Stanardsville.tif', legend_path='tests/data/legends/VA_Stanardsville.json')
+        map_data.poly_segmentation_mask = io.loadGeoTiff('tests/data/segmentations/VA_Stanardsville_poly_segmentation.tif')[0]
+        
+        map_data.generate_geometry_from_masks(Provenance(name='test', version='0.1'))
+        io.saveGeoPackage('tests/data/tmp.gpkg', map_data, coord_type='georeferenced')
+        assert True
     # Mule file load
     # def test_load_mock_mule(self):
     #     expected = mock_data.get_mock_map()

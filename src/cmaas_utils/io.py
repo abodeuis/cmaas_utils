@@ -353,11 +353,47 @@ def loadCMAASMap(json_path:Path, image_path:Path=None) -> CMAAS_Map:
                 map_data.georef.insert(0, GeoReference(provenance=Provenance(name='GeoTiff'), crs=crs, transform=transform))
     return map_data
 
-def saveCMASSMap(filepath, map_data:CMAAS_Map):
+def saveCMASSMap(filepath:Path, map_data:CMAAS_Map):
     if os.path.splitext(filepath)[1] not in ['.json', '.geojson']:
         filepath = f'{filepath}.json'
     with open(filepath, 'w') as fh:
         json.dump(map_data.to_dict(), fh)
+
+def saveGeoPackage(filepath:Path, map_data:CMAAS_Map, coord_type='pixel'):
+    from rasterio.transform import Affine
+    from rasterio.features import shapes, sieve 
+    from shapely.geometry import shape
+    if coord_type not in ['pixel','georeferenced']:
+        raise ValueError(f'Invalid coord_type: {coord_type}, valid types are: ["pixel","georeferenced"]')
+    transform = Affine(1, 0, 0, 0, 1, 0)
+    crs = CRS.from_epsg(4326)
+    if coord_type == 'georeferenced':
+        if map_data.georef is None:
+            raise ValueError('Can not save georeferenced coords as Map data does not have georeferencing')
+        if map_data.georef.crs is None:
+            raise ValueError('Can not save georeferenced coords as Map data does not have a CRS')
+        if map_data.georef.transform is None:
+            raise ValueError('Can not save georeferenced coords as Map data does not have a transform')
+        transform = map_data.georef.transform
+        crs = map_data.georef.crs
+    
+    # Have to rebuild geometry with georeferencing
+    legend_index = 1
+    for feature in map_data.legend.features:
+        # Get mask of feature
+        feature_mask = np.zeros_like(map_data.poly_segmentation_mask, dtype=np.uint8)
+        feature_mask[map_data.poly_segmentation_mask == legend_index] = 1
+        # Remove "noise" from mask by removing pixel groups smaller then the threshold
+        sieve_img = sieve(feature_mask, 10, connectivity=4)
+        # Convert mask to vector shapes
+        shape_gen = shapes(sieve_img, connectivity=4, transform=transform)
+        # Only use Filled pixels (1s) for shapes 
+        geometries = [shape(geometry) for geometry, value in shape_gen if value == 1]
+        geopkg = gpd.GeoDataFrame(geometry=geometries, crs=crs)
+        geopkg.to_file(filepath, layer=feature.label, driver='GPKG')
+        legend_index += 1
+
+    return True
 
 def parallelLoadCMASSMapFromFiles(map_files, legend_path=None, layout_path=None, processes : int=multiprocessing.cpu_count()):
     """Load a list of maps in parallel with N processes. Returns a list of CMASS_Map objects"""
