@@ -10,6 +10,10 @@ from .types import CMAAS_Map, CMAAS_MapMetadata, Layout, Legend, GeoReference, M
 from rasterio.crs import CRS
 from rasterio.control import GroundControlPoint
 
+from cdr_schemas.map_results import MapResults
+from cdr_schemas.feature_results import FeatureResults
+from pydantic.tools import parse_obj_as
+
 #region Legend
 def loadLegendJson(filepath:Path, type_filter:MapUnitType=MapUnitType.ALL()) -> Legend:
     with open(filepath, 'r') as fh:
@@ -359,10 +363,10 @@ def saveCMASSMap(filepath:Path, map_data:CMAAS_Map):
     with open(filepath, 'w') as fh:
         json.dump(map_data.to_dict(), fh)
 
-def saveGeoPackage(filepath:Path, map_data:CMAAS_Map, coord_type='pixel'):
+def saveGeoPackage(filepath, map_data:CMAAS_Map, coord_type='pixel'):
     from rasterio.transform import Affine
     from rasterio.features import shapes, sieve 
-    from shapely.geometry import shape
+    from shapely.geometry import shape, Point
     if coord_type not in ['pixel','georeferenced']:
         raise ValueError(f'Invalid coord_type: {coord_type}, valid types are: ["pixel","georeferenced"]')
     transform = Affine(1, 0, 0, 0, 1, 0)
@@ -380,16 +384,43 @@ def saveGeoPackage(filepath:Path, map_data:CMAAS_Map, coord_type='pixel'):
     # Have to rebuild geometry with georeferencing
     legend_index = 1
     for feature in map_data.legend.features:
-        # Get mask of feature
-        feature_mask = np.zeros_like(map_data.poly_segmentation_mask, dtype=np.uint8)
-        feature_mask[map_data.poly_segmentation_mask == legend_index] = 1
-        # Remove "noise" from mask by removing pixel groups smaller then the threshold
-        sieve_img = sieve(feature_mask, 10, connectivity=4)
-        # Convert mask to vector shapes
-        shape_gen = shapes(sieve_img, connectivity=4, transform=transform)
-        # Only use Filled pixels (1s) for shapes 
-        geometries = [shape(geometry) for geometry, value in shape_gen if value == 1]
+        # Skip features without defined save functions
+        if feature.type in [MapUnitType.POINT, MapUnitType.LINE, MapUnitType.UNKNOWN]:
+            continue
+        # if feature.type == MapUnitType.POINT:
+            # if map_data.point_segmentation_mask is None:
+            #     continue
+            # pipeline_manager.log(logging.WARNING, f'Saving {feature.label} as a point to geopackage')
+            # feature_mask = np.zeros_like(map_data.point_segmentation_mask, dtype=np.uint8)
+            # feature_mask[map_data.point_segmentation_mask == legend_index] = 1
+            # # geometries = np.where(feature_mask == 1)
+            # #pipeline_manager.log(f'point geometery len {len(geometries)}, shape {geometries[0].shape}')
+            # # shapely_geometries = []
+            # # for p in geometries:
+            # #     shapely_geometries.append(Point(p[0], p[1]))
+            # # geometries = shapely_geometries
+            # # Convert mask to vector shapes
+            # shape_gen = shapes(feature_mask, connectivity=4, transform=transform)
+            # # Only use Filled pixels (1s) for shapes
+            # geometries = [shape(geometry) for geometry, value in shape_gen if value == 1]
+        if feature.type == MapUnitType.POLYGON:
+            if map_data.poly_segmentation_mask is None:
+                continue
+            # Get mask of feature
+            feature_mask = np.zeros_like(map_data.poly_segmentation_mask, dtype=np.uint8)
+            feature_mask[map_data.poly_segmentation_mask == legend_index] = 1
+            # Remove "noise" from mask by removing pixel groups smaller then the threshold
+            sieve_img = sieve(feature_mask, 10, connectivity=4)
+            # Convert mask to vector shapes
+            shape_gen = shapes(sieve_img, connectivity=4, transform=transform)
+            # Only use Filled pixels (1s) for shapes 
+            geometries = [shape(geometry) for geometry, value in shape_gen if value == 1]
+        
+        pipeline_manager.log(logging.WARNING, f'Geometry for {feature.label} : Size = {len(geometries)}\n{geometries}')
         geopkg = gpd.GeoDataFrame(geometry=geometries, crs=crs)
+        # Don't bother writing empty geometries
+        if geopkg.empty:
+            continue
         geopkg.to_file(filepath, layer=feature.label, driver='GPKG')
         legend_index += 1
 
@@ -419,3 +450,23 @@ def parallelLoadCMASSMapFromFiles(map_files, legend_path=None, layout_path=None,
 
     return results
 # endregion CMAAS Map IO
+
+# region CDR IO
+def loadCDRMapResults(filepath:Path) -> MapResults:
+    """Load a CDR Map Result from a json file. Returns a MapResults object."""
+    with open(filepath, 'r') as fh:
+        json_data = json.load(fh)
+    return parse_obj_as(MapResults, json_data)
+    
+def loadCDRFeatureResults(filepath:Path) -> FeatureResults:
+    """Load a CDR Feature Result from a json file. Returns a FeatureResults object."""
+    with open(filepath, 'r') as fh:
+        json_data = json.load(fh)
+    return parse_obj_as(FeatureResults, json_data)
+
+def saveCDRFeatureResults(filepath, feature_result: FeatureResults):
+    """Save a CDR Feature Result to a json file."""
+    # Save CDR schema
+    with open(filepath, 'w') as fh:
+        fh.write(feature_result.model_dump_json())
+# endregion CDR IO

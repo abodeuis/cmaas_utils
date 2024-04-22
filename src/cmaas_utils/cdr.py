@@ -1,12 +1,34 @@
 # region CDR Schema
 import cdr_schemas.common
+from cdr_schemas.map_results import MapResults
 from cdr_schemas.feature_results import FeatureResults
 from typing import List
 
-from .types import CMAAS_Map, MapUnit, MapUnitType, MapUnitSegmentation, Provenance
+from .types import CMAAS_Map, MapUnit, MapUnitType, MapUnitSegmentation, Provenance, GeoReference
 
 # region CDR Common
-def export_CMAAS_Map_to_cdr_schema(map_data: CMAAS_Map, cog_id:str='', system:str='UIUC', system_version:str='0.1'):
+def importMapFromCDR(cdr_results: MapResults, map_image=None) -> CMAAS_Map:
+    """Imports a CDR map results object to a CMAAS map object."""
+    
+    map_data = CMAAS_Map(name=cdr_results.cog_id, cog_id=cdr_results.cog_id)
+    map_data.image = map_image
+    # Georeferencing
+    if len(cdr_results.georef_results) > 0:
+        # Just using the first Georef result as idk how to determine which one is the best
+        map_data.georef = _build_geo_ref_from_CDR(cdr_results.georef_results[0])
+
+    # Legend
+    
+
+    # Layout
+    
+    
+def _build_geo_ref_from_CDR() -> GeoReference:
+    # TODO: Implement geoeref loading
+    return None
+
+def exportMapToCDR(map_data: CMAAS_Map, cog_id:str='', system:str='UIUC', system_version:str='0.1') -> FeatureResults:
+    """Exports CMAAS map object to a CDR feature results object."""
     point_segmentations = []
     for feature in map_data.legend.features:
         if feature.type == MapUnitType.POINT:
@@ -16,11 +38,6 @@ def export_CMAAS_Map_to_cdr_schema(map_data: CMAAS_Map, cog_id:str='', system:st
         if feature.type == MapUnitType.POLYGON:
             polygon_segmentations.append(_build_CDR_poly_feature(feature, map_data.legend.provenance))
     return FeatureResults(cog_id=cog_id, system=system, system_version=system_version, point_feature_results=point_segmentations, polygon_feature_results=polygon_segmentations)
-
-def saveCDRFeatureResults(filepath, feature_result: FeatureResults):
-    # Save CDR schema
-    with open(filepath, 'w') as fh:
-        fh.write(feature_result.model_dump_json())
 
 def _build_CDR_provenance(provenance: Provenance) -> cdr_schemas.common.ModelProvenance:
     return cdr_schemas.common.ModelProvenance(model=provenance.name, model_version=provenance.version)

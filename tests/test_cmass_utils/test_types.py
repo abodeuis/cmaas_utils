@@ -213,12 +213,21 @@ class Test_CMAAS_Map:
         assert cmaas_map.metadata == metadata
         assert cmaas_map.layout == layout
 
-    def test_geometry_generation(self):
+    def test_poly_geometry_generation(self):
         map_data = CMAAS_Map(name='VA_Stanardsville')
         map_data.legend = io.loadLegendJson('tests/data/legends/VA_Stanardsville.json')
         map_data.poly_segmentation_mask = io.loadGeoTiff('tests/data/segmentations/VA_Stanardsville_poly_segmentation.tif')[0]
         
-        map_data.generate_geometry_from_masks(Provenance(name='test', version='0.1'))
+        map_data.generate_poly_geometry(Provenance(name='test', version='0.1'))
         # Just testing that the function executes without error
         assert True
+
+    # def test_point_geometry_generation(self):
+    #     # map_data = CMAAS_Map(name='VA_Stanardsville')
+    #     # map_data.legend = io.loadLegendJson('tests/data/legends/VA_Stanardsville.json')
+    #     # map_data.point_segmentation_mask = io.loadGeoTiff('tests/data/segmentations/VA_Stanardsville_point_segmentation.tif')[0]
+        
+    #     map_data.generate_point_geometry(Provenance(name='test', version='0.1'))
+    #     # Just testing that the function executes without error
+    #     assert True
 

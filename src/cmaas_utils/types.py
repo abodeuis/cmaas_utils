@@ -651,16 +651,12 @@ class CMAAS_Map(BaseModel):
         default=None,
         description="""The polygon map unit segmentation mask. This is a single image with the value of each pixel
                     being the map units index in the legend.features""")
-    
-    def generate_geometry_from_masks(self, mask_provenance:Provenance):
-        # if self.point_segmentation_mask is not None:
-            
-        if self.poly_segmentation_mask is not None:
-            self._generate_poly_geometry(mask_provenance)
 
-    def _generate_poly_geometry(self, mask_provenance:Provenance, noise_threshold=10):
+    def generate_poly_geometry(self, mask_provenance:Provenance, noise_threshold=10):
         legend_index = 1
         for feature in self.legend.features:
+            if feature.type != MapUnitType.POLYGON:
+                continue
             # Get mask of feature
             feature_mask = np.zeros_like(self.poly_segmentation_mask, dtype=np.uint8)
             feature_mask[self.poly_segmentation_mask == legend_index] = 1
@@ -670,12 +666,30 @@ class CMAAS_Map(BaseModel):
             shape_gen = shapes(sieve_img, connectivity=4)
             # Only use Filled pixels (1s) for shapes 
             geometries = [shape(geometry) for geometry, value in shape_gen if value == 1]
-            # Change Shapely geometryies to List(List(List(float)))
+            # Change Shapely geometries to List(List(List(float)))
             poly_geometry = [[[*point] for point in geometry.exterior.coords] for geometry in geometries]
             if feature.segmentation is None:
                 feature.segmentation = MapUnitSegmentation(provenance=mask_provenance, geometry=poly_geometry)
             else:
                 feature.segmentation.geometry = poly_geometry
+            legend_index += 1
+
+    def generate_point_geometry(self, mask_provenance:Provenance):
+        legend_index = 1
+        for feature in self.legend.features:
+            if feature.type != MapUnitType.POINT:
+                continue
+            # Get mask of feature
+            feature_mask = np.zeros_like(self.point_segmentation_mask, dtype=np.uint8)
+            feature_mask[self.point_segmentation_mask == legend_index] = 1
+            # Get points from mask
+            point_geometry = np.transpose(feature_mask.nonzero())
+            # Convert geometry to List(List(List(float)))
+            point_geometry = [[point] for point in point_geometry]
+            if feature.segmentation is None:
+                feature.segmentation = MapUnitSegmentation(provenance=mask_provenance, geometry=point_geometry)
+            else:
+                feature.segmentation.geometry = point_geometry
             legend_index += 1
 
 
