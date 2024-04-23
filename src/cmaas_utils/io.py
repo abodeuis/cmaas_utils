@@ -416,7 +416,6 @@ def saveGeoPackage(filepath, map_data:CMAAS_Map, coord_type='pixel'):
             # Only use Filled pixels (1s) for shapes 
             geometries = [shape(geometry) for geometry, value in shape_gen if value == 1]
         
-        pipeline_manager.log(logging.WARNING, f'Geometry for {feature.label} : Size = {len(geometries)}\n{geometries}')
         geopkg = gpd.GeoDataFrame(geometry=geometries, crs=crs)
         # Don't bother writing empty geometries
         if geopkg.empty:

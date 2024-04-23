@@ -202,7 +202,7 @@ class Test_MapData:
         map_data.legend = io.loadLegendJson('tests/data/legends/VA_Stanardsville.json')
         map_data.poly_segmentation_mask = io.loadGeoTiff('tests/data/segmentations/VA_Stanardsville_poly_segmentation.tif')[0]
         
-        map_data.generate_geometry_from_masks(Provenance(name='test', version='0.1'))
+        map_data.generate_poly_geometry(Provenance(name='test', version='0.1'))
         io.saveGeoPackage('tests/data/tmp.gpkg', map_data, coord_type='pixel')
         assert True
 
@@ -211,7 +211,7 @@ class Test_MapData:
         map_data = io.loadCMAASMapFromFiles('tests/data/images/VA_Stanardsville.tif', legend_path='tests/data/legends/VA_Stanardsville.json')
         map_data.poly_segmentation_mask = io.loadGeoTiff('tests/data/segmentations/VA_Stanardsville_poly_segmentation.tif')[0]
         
-        map_data.generate_geometry_from_masks(Provenance(name='test', version='0.1'))
+        map_data.generate_poly_geometry(Provenance(name='test', version='0.1'))
         io.saveGeoPackage('tests/data/tmp.gpkg', map_data, coord_type='georeferenced')
         assert True
     # Mule file load
