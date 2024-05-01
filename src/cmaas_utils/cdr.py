@@ -57,18 +57,18 @@ def importCDRFeatureResults(cdr_results: FeatureResults) -> CMAAS_Map:
     map_data.layout = Layout(provenance=Provenance(name=cdr_results.system, version=cdr_results.system_version))
     for ae in cdr_results.cog_area_extractions:
         if ae.category == AreaType.Map_Area:
-            map_data.layout.map = np.array(ae.coordinates)
+            map_data.layout.map = np.array(ae.coordinates).astype(int)
         if ae.category == AreaType.Polygon_Legend_Area:
-            map_data.layout.polygon_legend = np.array(ae.coordinates)
+            map_data.layout.polygon_legend = np.array(ae.coordinates).astype(int)
         if ae.category == AreaType.Line_Point_Legend_Area:
-            map_data.layout.line_legend = np.array(ae.coordinates)
-            map_data.layout.point_legend = np.array(ae.coordinates)
+            map_data.layout.line_legend = np.array(ae.coordinates).astype(int)
+            map_data.layout.point_legend = np.array(ae.coordinates).astype(int)
         if ae.category == AreaType.Point_Legend_Area:
-            map_data.layout.point_legend = np.array(ae.coordinates)
+            map_data.layout.point_legend = np.array(ae.coordinates).astype(int)
         if ae.category == AreaType.CrossSection:
-            map_data.layout.cross_section = np.array(ae.coordinates)
+            map_data.layout.cross_section = np.array(ae.coordinates).astype(int)
         if ae.category == AreaType.Correlation_Diagram:
-            map_data.layout.correlation_diagram = np.array(ae.coordinates)
+            map_data.layout.correlation_diagram = np.array(ae.coordinates).astype(int)
     return map_data
 # endregion Import CDR data
 
