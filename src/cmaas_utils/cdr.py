@@ -1,31 +1,22 @@
 # region CDR Schema
+import numpy as np
 import cdr_schemas.common
+from cdr_schemas.area_extraction import AreaType
 from cdr_schemas.map_results import MapResults
 from cdr_schemas.feature_results import FeatureResults
 from typing import List
 
-from .types import CMAAS_Map, MapUnit, MapUnitType, MapUnitSegmentation, Provenance, GeoReference
+from .types import CMAAS_Map, Layout, MapUnit, MapUnitType, MapUnitSegmentation, Provenance, GeoReference
 
 # region CDR Common
-def importMapFromCDR(cdr_results: MapResults, map_image=None) -> CMAAS_Map:
-    """Imports a CDR map results object to a CMAAS map object."""
+# def importCMAASMapFromCDR(cdr_results, map_image=None) -> CMAAS_Map:
+#     """Imports a cdr_results to a CMAAS map object."""
+#     if isinstance(cdr_results, MapResults):
+#         map_data = _importCDRMapResults(cdr_results)
+#     if isinstance(cdr_results, FeatureResults):
+#         map_data = _importCDRFeatureResults(cdr_results)
     
-    map_data = CMAAS_Map(name=cdr_results.cog_id, cog_id=cdr_results.cog_id)
-    map_data.image = map_image
-    # Georeferencing
-    if len(cdr_results.georef_results) > 0:
-        # Just using the first Georef result as idk how to determine which one is the best
-        map_data.georef = _build_geo_ref_from_CDR(cdr_results.georef_results[0])
-
-    # Legend
-    
-
-    # Layout
-    
-    
-def _build_geo_ref_from_CDR() -> GeoReference:
-    # TODO: Implement geoeref loading
-    return None
+#     map_data.image = map_image
 
 def exportMapToCDR(map_data: CMAAS_Map, cog_id:str='', system:str='UIUC', system_version:str='0.1') -> FeatureResults:
     """Exports CMAAS map object to a CDR feature results object."""
@@ -43,7 +34,45 @@ def _build_CDR_provenance(provenance: Provenance) -> cdr_schemas.common.ModelPro
     return cdr_schemas.common.ModelProvenance(model=provenance.name, model_version=provenance.version)
 # endregion CDR Common
 
-# region CDR Point
+# region Import CDR data
+# def importCDRMapResults(cdr_results: MapResults) -> CMAAS_Map:
+#     """Imports a CDR map results object to a CMAAS map object."""
+#     map_data = CMAAS_Map(name=cdr_results.cog_id, cog_id=cdr_results.cog_id)
+#     # Georeferencing
+#     if len(cdr_results.georef_results) > 0:
+#         # Just using the first Georef result as idk how to determine which one is the best
+#         map_data.georef = _build_geo_ref_from_CDR(cdr_results.georef_results[0])
+
+#     return map_data
+
+# def _build_geo_ref_from_CDR() -> GeoReference:
+#     # TODO: Implement geoeref loading
+#     return None
+
+def importCDRFeatureResults(cdr_results: FeatureResults) -> CMAAS_Map:
+    """Imports a CDR feature results object to a CMAAS map object."""
+    # Only importing area_extraction currently
+    map_data = CMAAS_Map(name=cdr_results.cog_id, cog_id=cdr_results.cog_id)
+    # Layout
+    map_data.layout = Layout(provenance=Provenance(name=cdr_results.system, version=cdr_results.system_version))
+    for ae in cdr_results.cog_area_extractions:
+        if ae.category == AreaType.Map_Area:
+            map_data.layout.map = np.array(ae.coordinates)
+        if ae.category == AreaType.Polygon_Legend_Area:
+            map_data.layout.polygon_legend = np.array(ae.coordinates)
+        if ae.category == AreaType.Line_Point_Legend_Area:
+            map_data.layout.line_legend = np.array(ae.coordinates)
+            map_data.layout.point_legend = np.array(ae.coordinates)
+        if ae.category == AreaType.Point_Legend_Area:
+            map_data.layout.point_legend = np.array(ae.coordinates)
+        if ae.category == AreaType.CrossSection:
+            map_data.layout.cross_section = np.array(ae.coordinates)
+        if ae.category == AreaType.Correlation_Diagram:
+            map_data.layout.correlation_diagram = np.array(ae.coordinates)
+    return map_data
+# endregion Import CDR data
+
+# region Export CDR Point
 from cdr_schemas.features.point_features import PointLegendAndFeaturesResult, PointFeatureCollection, PointFeature,  Point, PointProperties
 def _build_CDR_point_feature(feature: MapUnit, legend_provenance: Provenance) -> PointLegendAndFeaturesResult:
     if feature.segmentation is not None and feature.segmentation.geometry is not None:
@@ -79,9 +108,9 @@ def _build_CDR_point_property(provenance: Provenance) -> PointProperties:
     return PointProperties(
         model=provenance.name,
         model_version=provenance.version)
-# endregion CDR Point
+# endregion Export CDR Point
 
-# region CDR Polygon
+# region Export CDR Polygon
 from cdr_schemas.features.polygon_features import PolygonLegendAndFeaturesResult, PolygonFeatureCollection, PolygonFeature, Polygon, PolygonProperty
 def _build_CDR_poly_feature(feature: MapUnit, legend_provenance: Provenance) -> PolygonLegendAndFeaturesResult:
     if feature.segmentation is not None and feature.segmentation.geometry is not None:
@@ -116,4 +145,4 @@ def _build_CDR_polygon(geometry: List[List[float]]) -> Polygon:
 
 def _build_CDR_polygon_property(provenance: Provenance) -> PolygonProperty:
     return PolygonProperty(model=provenance.name, model_version=provenance.version)  
-# endregion CDR Polygon
+# endregion Export CDR Polygon
