@@ -98,6 +98,12 @@ class Test_USGSLegendData:
         exec_loadUSGSLegendJson(testfile, expected)
         exec_loadLegendJson(testfile, expected)
 
+    def test_load_drab_volcano_legend(self):
+        testfile = os.path.join(self.usgs_legend_dir,'drab_volcano_legend.json')
+        expected = mock_data.get_drab_volcano_legend()
+        exec_loadUSGSLegendJson(testfile, expected)
+        exec_loadLegendJson(testfile, expected)
+
     # TODO ParallelLoadLegends Test
 
 def exec_loadLayoutJson(filepath:Path, expected:Layout):

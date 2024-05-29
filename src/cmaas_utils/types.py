@@ -11,7 +11,7 @@ from rasterio.features import shapes, sieve
 # from rasterio.transform import from_gcps
 
 
-DEBUG_MODE = True # Turns on debuging why two objects are not equal
+DEBUG_MODE = False # Turns on debuging why two objects are not equal
 
 class MapUnitType(Enum):
     POINT = 1
@@ -109,6 +109,9 @@ class MapUnit(BaseModel):
     description : Optional[str] = Field(
         default=None,
         description='The description of the map unit in the legend')
+    aliases : Optional[List[str]] = Field(
+        default=None,
+        description='Any know aliases of the of the map unit\'s name.')
     color : Optional[str] = Field(
         default=None,
         description='The color of the map unit in the legend')
@@ -196,6 +199,7 @@ class MapUnit(BaseModel):
         repr_str += f'label : \'{self.label}\', '
         repr_str += f'abbreviation : \'{self.abbreviation}\', '
         repr_str += f'description : \'{self.description}\', '
+        repr_str += f'aliases : {self.aliases}, '
         repr_str += f'color : \'{self.color}\', '
         repr_str += f'pattern : \'{self.pattern}\', '
         repr_str += f'overlay : {self.overlay}, '

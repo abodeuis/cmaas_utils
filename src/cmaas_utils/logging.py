@@ -77,3 +77,10 @@ def start_logger(logger_name, filepath, log_level=logging.INFO, console_log_leve
         log.setLevel(log_level)
     
     return log
+
+def changeConsoleHandler(log, handler):
+    orig_handler = log.handlers[1]
+    handler.setLevel(orig_handler.level)
+    handler.setFormatter(orig_handler.formatter)
+    log.handlers[1] = handler
+    return orig_handler
