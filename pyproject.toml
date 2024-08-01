@@ -13,8 +13,10 @@ readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
   "numpy",
+  "pydantic",
   "rasterio",
-  "geopandas"
+  "geopandas",
+  "git+https://github.com/DARPA-CRITICALMAAS/cdr_schemas.git@v0.4.2"
 ]
 classifiers = [
     "Programming Language :: Python :: 3",

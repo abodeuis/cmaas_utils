@@ -365,10 +365,8 @@ def loadCMAASMap(json_path:Path, image_path:Path=None) -> CMAAS_Map:
     return map_data
 
 def saveCMASSMap(filepath:Path, map_data:CMAAS_Map):
-    if os.path.splitext(filepath)[1] not in ['.json', '.geojson']:
-        filepath = f'{filepath}.json'
     with open(filepath, 'w') as fh:
-        json.dump(map_data.to_dict(), fh)
+        fh.write(map_data.model_dump_json())
 
 def saveGeoPackage(filepath, map_data:CMAAS_Map, coord_type='pixel'):
     from rasterio.transform import Affine

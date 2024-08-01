@@ -278,22 +278,22 @@ class Layout(BaseModel):
     """
     provenance : Provenance = Field(
         description='Information about the source the Layout orginated from')
-    map : Optional[np.ndarray] = Field(
+    map : Optional[List[List[List[float]]]] = Field(
         default=None,
         description='The map segmentation')
-    point_legend : Optional[np.ndarray] = Field(
+    point_legend : Optional[List[List[List[float]]]] = Field(
         default=None,
         description='The point map unit segmentation')
-    line_legend : Optional[np.ndarray] = Field(
+    line_legend : Optional[List[List[List[float]]]] = Field(
         default=None,
         description='The line map unit segmentation')
-    polygon_legend : Optional[np.ndarray] = Field(
+    polygon_legend : Optional[List[List[List[float]]]] = Field(
         default=None,
         description='The polygon map unit segmentation')
-    correlation_diagram : Optional[np.ndarray] = Field(
+    correlation_diagram : Optional[List[List[List[float]]]] = Field(
         default=None,
         description='The correlation diagram')
-    cross_section : Optional[np.ndarray] = Field(
+    cross_section : Optional[List[List[List[float]]]] = Field(
         default=None,
         description='The cross section')
     

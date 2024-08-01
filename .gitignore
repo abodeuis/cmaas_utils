@@ -2,6 +2,10 @@
 *.pyc
 *.DS_Store
 
+
 # Directories to ignore
+.vscode
+.coverage
 [Llogs]
 venv
+dist

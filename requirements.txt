@@ -2,7 +2,7 @@ numpy
 rasterio
 geopandas
 pydantic
-git+https://github.com/DARPA-CRITICALMAAS/cdr_schemas.git@v0.2.6+draft
+git+https://github.com/DARPA-CRITICALMAAS/cdr_schemas.git@v0.4.2
 
 # Dev
 pytest

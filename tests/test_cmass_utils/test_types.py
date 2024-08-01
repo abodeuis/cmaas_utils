@@ -83,22 +83,22 @@ class Test_Layout():
         # Create a layout object
         layout = Layout(
             provenance=prov,
-            map=np.array([[1, 0, 1], [0, 1, 0], [1, 0, 1]]),
-            point_legend=np.array([[1, 0, 1], [0, 1, 0], [1, 0, 1]]),
-            line_legend=np.array([[1, 0, 1], [0, 1, 0], [1, 0, 1]]),
-            polygon_legend=np.array([[1, 0, 1], [0, 1, 0], [1, 0, 1]]),
-            correlation_diagram=np.array([[1, 0, 1], [0, 1, 0], [1, 0, 1]]),
-            cross_section=np.array([[1, 0, 1], [0, 1, 0], [1, 0, 1]])
+            map=[[[1, 0, 1], [0, 1, 0], [1, 0, 1]]],
+            point_legend=[[[1, 0, 1], [0, 1, 0], [1, 0, 1]]],
+            line_legend=[[[1, 0, 1], [0, 1, 0], [1, 0, 1]]],
+            polygon_legend=[[[1, 0, 1], [0, 1, 0], [1, 0, 1]]],
+            correlation_diagram=[[[1, 0, 1], [0, 1, 0], [1, 0, 1]]],
+            cross_section=[[[1, 0, 1], [0, 1, 0], [1, 0, 1]]]
         )
 
         # Check the attributes of the layout
         assert layout.provenance == prov
-        assert np.array_equal(layout.map, np.array([[1, 0, 1], [0, 1, 0], [1, 0, 1]]))
-        assert np.array_equal(layout.point_legend, np.array([[1, 0, 1], [0, 1, 0], [1, 0, 1]]))
-        assert np.array_equal(layout.line_legend, np.array([[1, 0, 1], [0, 1, 0], [1, 0, 1]]))
-        assert np.array_equal(layout.polygon_legend, np.array([[1, 0, 1], [0, 1, 0], [1, 0, 1]]))
-        assert np.array_equal(layout.correlation_diagram, np.array([[1, 0, 1], [0, 1, 0], [1, 0, 1]]))
-        assert np.array_equal(layout.cross_section, np.array([[1, 0, 1], [0, 1, 0], [1, 0, 1]]))
+        assert layout.map == [[[1, 0, 1], [0, 1, 0], [1, 0, 1]]]
+        assert layout.point_legend == [[[1, 0, 1], [0, 1, 0], [1, 0, 1]]]
+        assert layout.line_legend == [[[1, 0, 1], [0, 1, 0], [1, 0, 1]]]
+        assert layout.polygon_legend == [[[1, 0, 1], [0, 1, 0], [1, 0, 1]]]
+        assert layout.correlation_diagram == [[[1, 0, 1], [0, 1, 0], [1, 0, 1]]]
+        assert layout.cross_section == [[[1, 0, 1], [0, 1, 0], [1, 0, 1]]]
 
 class Test_GeoReference():
     def test_georeference_creation(self):
