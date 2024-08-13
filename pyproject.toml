@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cmaas_utils"
-version = "0.1.10"
+version = "0.1.11"
 authors = [{ name="Albert Bode", email="abode@illinois.edu" }]
 description = "This package contains common utility functions including structured data classes, io functions and other utilities that are used across the TA1 teams for DARPA Critical Mineral Assesments with AI Support (CMAAS)"
 readme = "README.md"
@@ -15,8 +15,7 @@ dependencies = [
   "numpy",
   "pydantic",
   "rasterio",
-  "geopandas",
-  "git+https://github.com/DARPA-CRITICALMAAS/cdr_schemas.git@v0.4.2"
+  "geopandas"
 ]
 classifiers = [
     "Programming Language :: Python :: 3",

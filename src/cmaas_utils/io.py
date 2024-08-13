@@ -47,7 +47,7 @@ def _loadUSGSLegendJson(filepath:Path, type_filter:MapUnitType=MapUnitType.ALL()
                 if unit_type != MapUnitType.UNKNOWN:
                     unit_alias = ' '.join(unit_alias.split(' ')[:-1])
                 unit_aliases.append(unit_alias)
-        legend.features.append(MapUnit(label=unit_label, type=unit_type, aliases=unit_aliases, bounding_box=np.array(m['points']).astype(int)))
+        legend.features.append(MapUnit(label=unit_label, type=unit_type, aliases=unit_aliases, label_bbox=np.array(m['points']).astype(int)))
     return legend
 
 def _loadMULELegend(filepath:Path, type_filter:MapUnitType=MapUnitType.ALL()) -> Legend:

@@ -37,7 +37,7 @@ class Test_MapUnit():
             color='blue',
             pattern='solid',
             overlay=False,
-            bounding_box=[[0, 0], [10, 10]]
+            label_bbox=[[0, 0], [10, 10]]
         )
 
         # Check the attributes of the map unit
@@ -48,7 +48,7 @@ class Test_MapUnit():
         assert map_unit.color == 'blue'
         assert map_unit.pattern == 'solid'
         assert map_unit.overlay == False
-        assert map_unit.bounding_box == [[0, 0], [10, 10]]
+        assert map_unit.label_bbox == [[0, 0], [10, 10]]
         assert map_unit.segmentation == None
 
 class Test_Legend():
@@ -65,7 +65,7 @@ class Test_Legend():
             color='blue',
             pattern='solid',
             overlay=False,
-            bounding_box=[[0, 0], [10, 10]]
+            label_bbox=[[0, 0], [10, 10]]
         )
 
         # Create a legend object

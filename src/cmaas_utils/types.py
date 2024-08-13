@@ -14,10 +14,10 @@ from rasterio.features import shapes, sieve
 DEBUG_MODE = False # Turns on debuging why two objects are not equal
 
 class MapUnitType(Enum):
-    POINT = 1
-    LINE = 2
-    POLYGON = 3
-    UNKNOWN = 4
+    POINT = 0
+    LINE = 1
+    POLYGON = 2
+    UNKNOWN = 3
     def ALL():
         return [MapUnitType.POINT, MapUnitType.LINE, MapUnitType.POLYGON, MapUnitType.UNKNOWN]
     def ALL_KNOWN():
@@ -96,19 +96,35 @@ class MapUnitSegmentation(BaseModel):
 
 class MapUnit(BaseModel):
     """
-    The information describing a map unit along with it's segmentation if present.
+    The information describing a map unit.
     """
     type : MapUnitType = Field(
         description='The type of the map unit')
     label : Optional[str] = Field(
         default=None,
         description='The label of the map unit in the legend')
-    abbreviation : Optional[str] = Field(
+    label_confidence : Optional[float] = Field(
         default=None,
-        description='The abbreviation of the map unit in the legend')
+        description='The predicted confidence of the label')
+    label_bbox : Optional[List[List[float]]] = Field(
+        default=None,
+        description="""The more precise polygon bounding box of the map units label. Format is expected to be [x,y]
+                    coordinate pairs where the top left is the origin (0,0).""")
+    
     description : Optional[str] = Field(
         default=None,
         description='The description of the map unit in the legend')
+    description_confidence : Optional[float] = Field(
+        default=None,
+        description='The predicted confidence of the description')
+    description_bbox : Optional[List[List[float]]] = Field(
+        default=None,
+        description="""The more precise polygon bounding box of the map units description. Format is expected to be [x,y]
+                    coordinate pairs where the top left is the origin (0,0).""")
+    
+    abbreviation : Optional[str] = Field(
+        default=None,
+        description='The abbreviation of the map unit in the legend')
     aliases : Optional[List[str]] = Field(
         default=None,
         description='Any know aliases of the of the map unit\'s name.')
@@ -121,25 +137,13 @@ class MapUnit(BaseModel):
     overlay : Optional[bool] = Field(
         default=False,
         description='Wheather or not the map unit can be overlayed on other map units')
-    bounding_box : Optional[List[List[float]]] = Field(
-        default=None,
-        description="""The more precise polygon bounding box of the map units label. Format is expected to be [x,y]
-                    coordinate pairs where the top left is the origin (0,0).""")
+    
     segmentation : Optional[MapUnitSegmentation] = Field(
         default=None,
         description='The segmentation of the map unit')
-    
-    # def to_dict(self):
-    #     return {
-    #         'type' : self.type,
-    #         'label' : self.label,
-    #         'abbreviation' : self.abbreviation,
-    #         'description' : self.description,
-    #         'color' : self.color,
-    #         'pattern' : self.pattern,
-    #         'overlay' : self.overlay,
-    #         'bounding_box' : self.bounding_box
-    #     }
+    segmentation_confidence : Optional[float] = Field(
+        default=None,
+        description='The predicted confidence of the segmentation')
     
     # def __eq__(self, __value: object) -> bool:
     #     # Check if either self or __value is None
@@ -203,7 +207,7 @@ class MapUnit(BaseModel):
         repr_str += f'color : \'{self.color}\', '
         repr_str += f'pattern : \'{self.pattern}\', '
         repr_str += f'overlay : {self.overlay}, '
-        repr_str += f'bounding_box : {self.bounding_box}'
+        repr_str += f'bounding_box : {self.label_bbox}'
         return repr_str
 
 class Legend(BaseModel):

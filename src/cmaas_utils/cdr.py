@@ -85,7 +85,7 @@ def _build_CDR_point_feature(feature: MapUnit, legend_provenance: Provenance) ->
         name=feature.label if feature.label is not None else "",
         abbreviation=feature.abbreviation if feature.abbreviation is not None else "",
         description=feature.description if feature.description is not None else "",
-        legend_contour=feature.bounding_box if feature.bounding_box is not None else [],
+        legend_contour=feature.label_bbox if feature.label_bbox is not None else [],
         point_features=point_collection)
     return point_feature
 
@@ -123,7 +123,7 @@ def _build_CDR_poly_feature(feature: MapUnit, legend_provenance: Provenance) -> 
         label=feature.label if feature.label is not None else "",
         abbreviation=feature.abbreviation if feature.abbreviation is not None else "",
         description=feature.description if feature.description is not None else "",
-        legend_contour=feature.bounding_box if feature.bounding_box is not None else [],
+        legend_contour=feature.label_bbox if feature.label_bbox is not None else [],
         color=feature.color if feature.color is not None else "",
         pattern=feature.pattern if feature.pattern is not None else "",
         polygon_features=poly_collection)
