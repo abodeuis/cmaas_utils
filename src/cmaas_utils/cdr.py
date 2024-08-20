@@ -85,7 +85,7 @@ def _build_CDR_point_feature(feature: MapUnit, legend_provenance: Provenance) ->
         name=feature.label if feature.label is not None else "",
         abbreviation=feature.abbreviation if feature.abbreviation is not None else "",
         description=feature.description if feature.description is not None else "",
-        legend_contour=feature.label_bbox if feature.label_bbox is not None else [],
+        # legend_contour=feature.label_bbox if feature.label_bbox is not None else [],
         legend_bbox=[*feature.label_bbox[0], *feature.label_bbox[1]] if feature.label_bbox is not None else [],
         point_features=point_collection)
     return point_feature
