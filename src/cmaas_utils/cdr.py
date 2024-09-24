@@ -112,7 +112,7 @@ def _build_CDR_point_property(provenance: Provenance) -> PointProperties:
 # endregion Export CDR Point
 
 # region Export CDR Polygon
-from cdr_schemas.features.polygon_features import PolygonLegendAndFeaturesResult, PolygonFeatureCollection, PolygonFeature, Polygon, PolygonProperty
+from cdr_schemas.features.polygon_features import PolygonLegendAndFeaturesResult, PolygonFeatureCollection, PolygonFeature, Polygon, PolygonProperties
 def _build_CDR_poly_feature(feature: MapUnit, legend_provenance: Provenance) -> PolygonLegendAndFeaturesResult:
     if feature.segmentation is not None and feature.segmentation.geometry is not None:
         poly_collection = _build_CDR_poly_feature_collection(feature.segmentation)
@@ -128,23 +128,29 @@ def _build_CDR_poly_feature(feature: MapUnit, legend_provenance: Provenance) -> 
         legend_bbox=[*feature.label_bbox[0], *feature.label_bbox[1]] if feature.label_bbox is not None else [],
         color=feature.color if feature.color is not None else "",
         pattern=feature.pattern if feature.pattern is not None else "",
-        polygon_features=poly_collection)
+        polygon_features=poly_collection,
+        map_unit=[])
     return poly_feature
 
 def _build_CDR_poly_feature_collection(segmentation: MapUnitSegmentation) -> PolygonFeatureCollection:
-    poly_features = []
-    for poly in segmentation.geometry:
-        poly_features.append(PolygonFeature(
-            id='None', 
-            geometry=_build_CDR_polygon(poly), 
-            properties=_build_CDR_polygon_property(segmentation.provenance)
-        ))
+    poly_features = [PolygonFeature(
+        id='None',
+        geometry=_build_CDR_polygon(segmentation.geometry),
+        properties=_build_CDR_polygon_property(segmentation.provenance)
+    )]
+    # poly_features = []
+    # for poly in segmentation.geometry:
+    #     poly_features.append(PolygonFeature(
+    #         id='None', 
+    #         geometry=_build_CDR_polygon(poly), 
+    #         properties=_build_CDR_polygon_property(segmentation.provenance)
+    #     ))
     
     return PolygonFeatureCollection(features=poly_features)
 
-def _build_CDR_polygon(geometry: List[List[float]]) -> Polygon:
-    return Polygon(coordinates=[geometry])
+def _build_CDR_polygon(geometry: List[List[List[float]]]) -> Polygon:
+    return Polygon(coordinates=geometry)
 
-def _build_CDR_polygon_property(provenance: Provenance) -> PolygonProperty:
-    return PolygonProperty(model=provenance.name, model_version=provenance.version)  
+def _build_CDR_polygon_property(provenance: Provenance) -> PolygonProperties:
+    return PolygonProperties(model=provenance.name, model_version=provenance.version)  
 # endregion Export CDR Polygon
