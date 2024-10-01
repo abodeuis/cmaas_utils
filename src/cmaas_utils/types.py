@@ -87,7 +87,7 @@ class MapUnitSegmentation(BaseModel):
     mask : Optional[np.ndarray] = Field(
         default=None,
         description='A binary mask of the map unit')
-    geometry : Optional[List[List[List[float]]]] = Field(
+    geometry : Optional[List[List[List[List[float]]]]] = Field(
         default=None,
         description='The vector geometry of the map unit')
     
