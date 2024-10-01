@@ -674,12 +674,19 @@ class CMAAS_Map(BaseModel):
             shape_gen = shapes(sieve_img, connectivity=4)
             # Only use Filled pixels (1s) for shapes 
             geometries = [shape(geometry) for geometry, value in shape_gen if value == 1]
-            # Change Shapely geometries to List(List(List(float)))
-            poly_geometry = [[[*point] for point in geometry.exterior.coords] for geometry in geometries]
+            # Change Shapely geometries to List(List(List(List(float))))
+            polygons = []
+            for polygon in geometries:
+                poly_geometry = []
+                poly_geometry.append([[*point] for point in polygon.exterior.coords])
+                for interior in polygon.interiors:
+                    poly_geometry.append([[*point] for point in interior.coords])
+                polygons.append(poly_geometry)
+            # Add geometry to feature segmentation
             if feature.segmentation is None:
-                feature.segmentation = MapUnitSegmentation(provenance=mask_provenance, geometry=poly_geometry)
+                feature.segmentation = MapUnitSegmentation(provenance=mask_provenance, geometry=polygons)
             else:
-                feature.segmentation.geometry = poly_geometry
+                feature.segmentation.geometry = polygons
             legend_index += 1
 
     def generate_point_geometry(self, mask_provenance:Provenance):

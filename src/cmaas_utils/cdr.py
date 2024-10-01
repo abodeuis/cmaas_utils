@@ -133,18 +133,18 @@ def _build_CDR_poly_feature(feature: MapUnit, legend_provenance: Provenance) -> 
     return poly_feature
 
 def _build_CDR_poly_feature_collection(segmentation: MapUnitSegmentation) -> PolygonFeatureCollection:
-    poly_features = [PolygonFeature(
-        id='None',
-        geometry=_build_CDR_polygon(segmentation.geometry),
-        properties=_build_CDR_polygon_property(segmentation.provenance)
-    )]
-    # poly_features = []
-    # for poly in segmentation.geometry:
-    #     poly_features.append(PolygonFeature(
-    #         id='None', 
-    #         geometry=_build_CDR_polygon(poly), 
-    #         properties=_build_CDR_polygon_property(segmentation.provenance)
-    #     ))
+    # poly_features = [PolygonFeature(
+    #     id='None',
+    #     geometry=_build_CDR_polygon(segmentation.geometry),
+    #     properties=_build_CDR_polygon_property(segmentation.provenance)
+    # )]
+    poly_features = []
+    for polygon in segmentation.geometry:
+        poly_features.append(PolygonFeature(
+            id='None', 
+            geometry=_build_CDR_polygon(polygon), 
+            properties=_build_CDR_polygon_property(segmentation.provenance)
+        ))
     
     return PolygonFeatureCollection(features=poly_features)
 
