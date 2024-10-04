@@ -9,15 +9,6 @@ from typing import List
 from .types import CMAAS_Map, Layout, MapUnit, MapUnitType, MapUnitSegmentation, Provenance, GeoReference
 
 # region CDR Common
-# def importCMAASMapFromCDR(cdr_results, map_image=None) -> CMAAS_Map:
-#     """Imports a cdr_results to a CMAAS map object."""
-#     if isinstance(cdr_results, MapResults):
-#         map_data = _importCDRMapResults(cdr_results)
-#     if isinstance(cdr_results, FeatureResults):
-#         map_data = _importCDRFeatureResults(cdr_results)
-    
-#     map_data.image = map_image
-
 def exportMapToCDR(map_data: CMAAS_Map, cog_id:str='', system:str='UIUC', system_version:str='0.1') -> FeatureResults:
     """Exports CMAAS map object to a CDR feature results object."""
     point_segmentations = []
@@ -33,21 +24,6 @@ def exportMapToCDR(map_data: CMAAS_Map, cog_id:str='', system:str='UIUC', system
 def _build_CDR_provenance(provenance: Provenance) -> cdr_schemas.common.ModelProvenance:
     return cdr_schemas.common.ModelProvenance(model=provenance.name, model_version=provenance.version)
 # endregion CDR Common
-
-# region Import CDR data
-# def importCDRMapResults(cdr_results: MapResults) -> CMAAS_Map:
-#     """Imports a CDR map results object to a CMAAS map object."""
-#     map_data = CMAAS_Map(name=cdr_results.cog_id, cog_id=cdr_results.cog_id)
-#     # Georeferencing
-#     if len(cdr_results.georef_results) > 0:
-#         # Just using the first Georef result as idk how to determine which one is the best
-#         map_data.georef = _build_geo_ref_from_CDR(cdr_results.georef_results[0])
-
-#     return map_data
-
-# def _build_geo_ref_from_CDR() -> GeoReference:
-#     # TODO: Implement geoeref loading
-#     return None
 
 def importCDRFeatureResults(cdr_results: FeatureResults) -> CMAAS_Map:
     """Imports a CDR feature results object to a CMAAS map object."""
@@ -91,14 +67,17 @@ def _build_CDR_point_feature(feature: MapUnit, legend_provenance: Provenance) ->
     return point_feature
 
 def _build_CDR_point_feature_collection(segmentation: MapUnitSegmentation) -> PointFeatureCollection:
-    point_features = []
-    for point in segmentation.geometry:
-        for coord in point:
-            point_features.append(PointFeature(
-                id='None',
-                geometry=_build_CDR_point(coord),
-                properties=_build_CDR_point_property(segmentation.provenance)
-            ))
+    # TODO : Just disabling this as we don't expect to be exporting point feature geometry to the CDR, and i would have to fix it to work with the new shapely format
+    # point_features = []
+    # for point in segmentation.geometry:
+    #     for coord in point:
+    #         point_features.append(
+    #             PointFeature(
+    #                 id='None',
+    #                 geometry=_build_CDR_point(coord),
+    #                 properties=_build_CDR_point_property(segmentation.provenance)
+    #             )
+    #         )
     
     return PointFeatureCollection(features=point_features)
 
@@ -133,18 +112,20 @@ def _build_CDR_poly_feature(feature: MapUnit, legend_provenance: Provenance) -> 
     return poly_feature
 
 def _build_CDR_poly_feature_collection(segmentation: MapUnitSegmentation) -> PolygonFeatureCollection:
-    # poly_features = [PolygonFeature(
-    #     id='None',
-    #     geometry=_build_CDR_polygon(segmentation.geometry),
-    #     properties=_build_CDR_polygon_property(segmentation.provenance)
-    # )]
     poly_features = []
     for polygon in segmentation.geometry:
-        poly_features.append(PolygonFeature(
-            id='None', 
-            geometry=_build_CDR_polygon(polygon), 
-            properties=_build_CDR_polygon_property(segmentation.provenance)
-        ))
+        # Change Shapely geometries to CDR Format
+        poly_geometry = []
+        poly_geometry.append([[*point] for point in polygon.exterior.coords])
+        for interior in polygon.interiors:
+            poly_geometry.append([[*point] for point in interior.coords])
+        poly_features.append(
+            PolygonFeature(
+                id='None',
+                geometry=_build_CDR_polygon(poly_geometry), 
+                properties=_build_CDR_polygon_property(segmentation.provenance)
+            )
+        )
     
     return PolygonFeatureCollection(features=poly_features)
 

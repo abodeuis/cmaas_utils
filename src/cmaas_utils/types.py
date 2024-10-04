@@ -13,6 +13,7 @@ from rasterio.features import shapes, sieve
 
 DEBUG_MODE = False # Turns on debuging why two objects are not equal
 
+# region MapUnit
 class MapUnitType(Enum):
     POINT = 0
     LINE = 1
@@ -81,13 +82,17 @@ class Provenance(BaseModel):
     #         return False
     #     return True
 
+from shapely.geometry import Polygon
 class MapUnitSegmentation(BaseModel):
     provenance : Provenance = Field(
         description='Information about the source the segmentation orginated from')
+    confidence : Optional[float] = Field(
+        default=None,
+        description='The confidence of the segmentation')
     mask : Optional[np.ndarray] = Field(
         default=None,
         description='A binary mask of the map unit')
-    geometry : Optional[List[List[List[List[float]]]]] = Field(
+    geometry : Optional[List[Polygon]] = Field(
         default=None,
         description='The vector geometry of the map unit')
     
@@ -141,9 +146,6 @@ class MapUnit(BaseModel):
     segmentation : Optional[MapUnitSegmentation] = Field(
         default=None,
         description='The segmentation of the map unit')
-    segmentation_confidence : Optional[float] = Field(
-        default=None,
-        description='The predicted confidence of the segmentation')
     
     # def __eq__(self, __value: object) -> bool:
     #     # Check if either self or __value is None
@@ -209,7 +211,9 @@ class MapUnit(BaseModel):
         repr_str += f'overlay : {self.overlay}, '
         repr_str += f'bounding_box : {self.label_bbox}'
         return repr_str
+# endregion MapUnit
 
+# region Legend
 class Legend(BaseModel):
     """
     A collection of map units that make up the legend of a map.
@@ -275,7 +279,8 @@ class Legend(BaseModel):
     def __repr__(self) -> str:
         repr_str = 'Legend{Provenance : ' + f'{self.provenance}, {len(self.features)} Features : {self.features}' + '}'
         return repr_str
-
+# endregion Legend
+# region Layout
 class Layout(BaseModel):
     """
     The area segmentations for a map
@@ -411,7 +416,8 @@ class Layout(BaseModel):
             'correlation_diagram' : self.correlation_diagram,
             'cross_section' : self.cross_section,
         }
-
+# endregion Layout
+# region GeoReference
 class GeoReference(BaseModel):
     """
     Georeferencing information for a map.
@@ -452,7 +458,8 @@ class GeoReference(BaseModel):
                 return False
 
         return True
-
+# endregion GeoReference
+# region OCRText
 class TextUnit(BaseModel):
     """
     A single unit of text extracted from a map.
@@ -475,7 +482,8 @@ class OCRText(BaseModel):
     features : List[TextUnit] = Field(
         default=[],
         description='The individual text units in the map')
-        
+# endregion OCRText
+# region Map Metadata
 class CMAAS_MapMetadata(BaseModel):
     """
     Metadata for a map.
@@ -621,7 +629,8 @@ class CMAAS_MapMetadata(BaseModel):
     #             print(f'Physiographic Region Mismatch: {self.physiographic_region} != {__value.physiographic_region}')
     #         return False
     #     return True
-
+# endregion Map Metadata
+# region CMAAS Map
 class CMAAS_Map(BaseModel):
     """
     Contains all of the CMAAS data for a map.
@@ -674,19 +683,11 @@ class CMAAS_Map(BaseModel):
             shape_gen = shapes(sieve_img, connectivity=4)
             # Only use Filled pixels (1s) for shapes 
             geometries = [shape(geometry) for geometry, value in shape_gen if value == 1]
-            # Change Shapely geometries to List(List(List(List(float))))
-            polygons = []
-            for polygon in geometries:
-                poly_geometry = []
-                poly_geometry.append([[*point] for point in polygon.exterior.coords])
-                for interior in polygon.interiors:
-                    poly_geometry.append([[*point] for point in interior.coords])
-                polygons.append(poly_geometry)
             # Add geometry to feature segmentation
             if feature.segmentation is None:
-                feature.segmentation = MapUnitSegmentation(provenance=mask_provenance, geometry=polygons)
+                feature.segmentation = MapUnitSegmentation(provenance=mask_provenance, geometry=geometries)
             else:
-                feature.segmentation.geometry = polygons
+                feature.segmentation.geometry = geometries
             legend_index += 1
 
     def generate_point_geometry(self, mask_provenance:Provenance):
@@ -785,4 +786,4 @@ class CMAAS_Map(BaseModel):
             'georef' : [g.to_dict() for g in self.georef] if self.georef is not None else None,
             'ocrtext' : self.ocrtext.to_dict() if self.ocrtext is not None else None
         }
-
+# endregion CMAAS Map

@@ -14,6 +14,9 @@ from cdr_schemas.map_results import MapResults
 from cdr_schemas.feature_results import FeatureResults
 from pydantic.tools import parse_obj_as
 
+import pandas as pd
+from shapely.affinity import affine_transform
+
 #region Legend
 def loadLegendJson(filepath:Path, type_filter:MapUnitType=MapUnitType.ALL()) -> Legend:
     with open(filepath, 'r') as fh:
@@ -368,67 +371,36 @@ def saveCMASSMap(filepath:Path, map_data:CMAAS_Map):
     with open(filepath, 'w') as fh:
         fh.write(map_data.model_dump_json())
 
-def saveGeoPackage(filepath, map_data:CMAAS_Map, coord_type='pixel'):
-    from rasterio.transform import Affine
-    from rasterio.features import shapes, sieve 
-    from shapely.geometry import shape, Point
-    if coord_type not in ['pixel','georeferenced']:
-        raise ValueError(f'Invalid coord_type: {coord_type}, valid types are: ["pixel","georeferenced"]')
-    transform = Affine(1, 0, 0, 0, 1, 0)
-    crs = CRS.from_epsg(4326)
-    if coord_type == 'georeferenced':
-        if map_data.georef is None:
-            raise ValueError('Can not save georeferenced coords as Map data does not have georeferencing')
-        if map_data.georef.crs is None:
-            raise ValueError('Can not save georeferenced coords as Map data does not have a CRS')
-        if map_data.georef.transform is None:
-            raise ValueError('Can not save georeferenced coords as Map data does not have a transform')
-        transform = map_data.georef.transform
-        crs = map_data.georef.crs
+def saveGeoPackage(filepath: Path, map_data: CMAAS_Map):
+    import geopandas as gpd
+    from shapely.geometry import Polygon, Point, LineString
+    from shapely.affinity import affine_transform
     
-    # Have to rebuild geometry with georeferencing
-    legend_index = 1
-    for feature in map_data.legend.features:
-        # Skip features without defined save functions
-        if feature.type in [MapUnitType.POINT, MapUnitType.LINE, MapUnitType.UNKNOWN]:
-            continue
-        # if feature.type == MapUnitType.POINT:
-            # if map_data.point_segmentation_mask is None:
-            #     continue
-            # pipeline_manager.log(logging.WARNING, f'Saving {feature.label} as a point to geopackage')
-            # feature_mask = np.zeros_like(map_data.point_segmentation_mask, dtype=np.uint8)
-            # feature_mask[map_data.point_segmentation_mask == legend_index] = 1
-            # # geometries = np.where(feature_mask == 1)
-            # #pipeline_manager.log(f'point geometery len {len(geometries)}, shape {geometries[0].shape}')
-            # # shapely_geometries = []
-            # # for p in geometries:
-            # #     shapely_geometries.append(Point(p[0], p[1]))
-            # # geometries = shapely_geometries
-            # # Convert mask to vector shapes
-            # shape_gen = shapes(feature_mask, connectivity=4, transform=transform)
-            # # Only use Filled pixels (1s) for shapes
-            # geometries = [shape(geometry) for geometry, value in shape_gen if value == 1]
-        if feature.type == MapUnitType.POLYGON:
-            if map_data.poly_segmentation_mask is None:
-                continue
-            # Get mask of feature
-            feature_mask = np.zeros_like(map_data.poly_segmentation_mask, dtype=np.uint8)
-            feature_mask[map_data.poly_segmentation_mask == legend_index] = 1
-            # Remove "noise" from mask by removing pixel groups smaller then the threshold
-            sieve_img = sieve(feature_mask, 10, connectivity=4)
-            # Convert mask to vector shapes
-            shape_gen = shapes(sieve_img, connectivity=4, transform=transform)
-            # Only use Filled pixels (1s) for shapes 
-            geometries = [shape(geometry) for geometry, value in shape_gen if value == 1]
-        
-        geopkg = gpd.GeoDataFrame(geometry=geometries, crs=crs)
-        # Don't bother writing empty geometries
-        if geopkg.empty:
-            continue
-        geopkg.to_file(filepath, layer=feature.label, driver='GPKG')
-        legend_index += 1
+    # Create a GeoDataFrame to store all features
+    gdf = gpd.GeoDataFrame()
+    
+    # Get the crs
+    if map_data.georef and map_data.georef.crs:
+        crs = map_data.georef.crs
+    else:
+        crs = CRS.from_epsg(4326)
 
-    return True
+    # Process each feature in the legend
+    for feature in map_data.legend.features:
+        if feature.segmentation and feature.segmentation.geometry:
+            geometries = feature.segmentation.geometry
+            
+            # Apply transform
+            if map_data.georef and map_data.georef.transform:
+                geometries = [affine_transform(geom, map_data.georef.transform) for geom in geometries]
+            
+            # Create a GeoDataFrame for this feature    
+            gdf = gpd.GeoDataFrame(geometry=geometries, crs=crs)
+
+            # Save to GeoPackage
+            gdf.to_file(filepath, layer=feature.label, driver="GPKG")
+    
+        
 
 def parallelLoadCMASSMapFromFiles(map_files, legend_path=None, layout_path=None, processes : int=multiprocessing.cpu_count()):
     """Load a list of maps in parallel with N processes. Returns a list of CMASS_Map objects"""
