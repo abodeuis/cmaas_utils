@@ -371,7 +371,7 @@ def saveCMASSMap(filepath:Path, map_data:CMAAS_Map):
     with open(filepath, 'w') as fh:
         fh.write(map_data.model_dump_json())
 
-def saveGeoPackage(filepath: Path, map_data: CMAAS_Map):
+def saveGeoPackage(filepath: Path, map_data: CMAAS_Map, coord_type: Literal['pixel', 'georef']='pixel'):
     import geopandas as gpd
     from shapely.geometry import Polygon, Point, LineString
     from shapely.affinity import affine_transform
@@ -391,8 +391,10 @@ def saveGeoPackage(filepath: Path, map_data: CMAAS_Map):
             geometries = feature.segmentation.geometry
             
             # Apply transform
-            if map_data.georef and map_data.georef.transform:
-                geometries = [affine_transform(geom, map_data.georef.transform) for geom in geometries]
+            if map_data.georef and map_data.georef.transform and coord_type == 'georef':
+                transform = map_data.georef.transform
+                affine_params = [transform.a, transform.b, transform.d, transform.e, transform.xoff, transform.yoff]
+                geometries = [affine_transform(geom, affine_params) for geom in geometries]
             
             # Create a GeoDataFrame for this feature    
             gdf = gpd.GeoDataFrame(geometry=geometries, crs=crs)
