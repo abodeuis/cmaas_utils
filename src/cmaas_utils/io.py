@@ -371,7 +371,7 @@ def saveCMASSMap(filepath:Path, map_data:CMAAS_Map):
     with open(filepath, 'w') as fh:
         fh.write(map_data.model_dump_json())
 
-def saveGeoPackage(filepath: Path, map_data: CMAAS_Map, coord_type: Literal['pixel', 'georef']='pixel'):
+def saveGeoPackage(filepath: Path, map_data: CMAAS_Map, coord_type:str='pixel'):
     import geopandas as gpd
     from shapely.geometry import Polygon, Point, LineString
     from shapely.affinity import affine_transform
