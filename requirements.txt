@@ -2,9 +2,10 @@ numpy
 rasterio
 geopandas
 pydantic
+opencv-python
 git+https://github.com/DARPA-CRITICALMAAS/cdr_schemas.git@v0.4.9
 
 # Dev
-pytest
-pytest-cov
-pip-tools
+# pytest
+# pytest-cov
+# pip-tools
