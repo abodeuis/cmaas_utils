@@ -19,7 +19,7 @@
                 7.0
             ]
         ],
-        "confidence": 0.9999977946281433,
+        "confidence": 0.999994158744812,
         "ocr_text": null,
         "color_estimation": null,
         "model": {
@@ -48,7 +48,7 @@
                 16.0
             ]
         ],
-        "confidence": 0.9999974966049194,
+        "confidence": 0.9994714260101318,
         "ocr_text": null,
         "color_estimation": null,
         "model": {
@@ -77,7 +77,7 @@
                 32.0
             ]
         ],
-        "confidence": 0.9999912977218628,
+        "confidence": 0.999996542930603,
         "ocr_text": null,
         "color_estimation": null,
         "model": {
@@ -106,7 +106,7 @@
                 39.0
             ]
         ],
-        "confidence": 0.9999974966049194,
+        "confidence": 0.5043506026268005,
         "ocr_text": null,
         "color_estimation": null,
         "model": {
@@ -135,7 +135,7 @@
                 56.0
             ]
         ],
-        "confidence": 0.9999974966049194,
+        "confidence": 0.5043506026268005,
         "ocr_text": null,
         "color_estimation": null,
         "model": {
