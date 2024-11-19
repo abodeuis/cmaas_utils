@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cmaas_utils"
-version = "0.2.0"
+version = "0.2.1"
 authors = [{ name="Albert Bode", email="abode@illinois.edu" }]
 description = "This package contains common utility functions including structured data classes, io functions and other utilities that are used across the TA1 teams for DARPA Critical Mineral Assesments with AI Support (CMAAS)"
 readme = "README.md"
