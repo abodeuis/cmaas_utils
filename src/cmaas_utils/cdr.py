@@ -236,7 +236,7 @@ def convert_cdr_legend_items_to_legend(cdr_legend:List[LegendItemResponse]) -> L
         map_unit.description = item.description
         map_unit.color = item.color
         map_unit.pattern = item.pattern
-        map_unit.label_bbox = [item.px_bbox[0:2],item.px_bbox[2:4]]
+        map_unit.label_bbox = [item.px_bbox[0:2],item.px_bbox[2:4]] if len(item.px_bbox) > 0 else []
         legend.features.append(map_unit)
     return legend
 
