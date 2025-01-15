@@ -61,7 +61,7 @@ def generate_point_geometry(segmentation:MapSegmentation, legend:Legend):
         legend_index += 1
     return legend
 
-def mask_and_crop(image:np.ndarray, areas:List[AreaBoundary]):
+def mask_and_crop(image, areas):
     """
     Mask and crop an image based on a list of areas.
 
@@ -80,7 +80,10 @@ def mask_and_crop(image:np.ndarray, areas:List[AreaBoundary]):
         cv2.fillPoly(mask, [np.array(area.geometry, dtype=np.int32)], 255)
     # Mask the image
     masked_img = cv2.bitwise_and(t_img, t_img, mask=mask)
+    if len(masked_img.shape) == 2:
+        masked_img = np.expand_dims(masked_img, axis=2)
     # Crop the image
     x, y, w, h = cv2.boundingRect(mask)
     cropped_img = masked_img[y:y+h, x:x+w]
-    return cropped_img.transpose(2,0,1), (x,y)
+    cropped_img = cropped_img.transpose(2,0,1)
+    return cropped_img, (x,y)
